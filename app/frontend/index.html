@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Cloud Native Online Book Store</title>
+
+</head>
+
+<body>
+
+<h1>Cloud Native Online Book Store</h1>
+
+<div id="books">
+    Loading books...
+</div>
+
+<script>
+
+fetch("/api/books")
+
+    .then(response => response.json())
+
+    .then(books => {
+
+        const container =
+            document.getElementById("books");
+
+        container.innerHTML = "";
+
+        books.forEach(book => {
+
+            const item =
+                document.createElement("div");
+
+            item.innerHTML = `
+                <h2>${book.title}</h2>
+                <p>Author: ${book.author}</p>
+                <p>Price: $${book.price}</p>
+                <hr>
+            `;
+
+            container.appendChild(item);
+
+        });
+
+    })
+
+    .catch(error => {
+
+        document.getElementById("books")
+            .innerText =
+            "Unable to load books.";
+
+        console.error(error);
+
+    });
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+region             = "cn-hongkong"
+availability_zones = ["cn-hongkong-b", "cn-hongkong-c"]
+vswitch_cidrs      = ["10.20.1.0/24", "10.20.2.0/24"]
+
+# Replace with the public IP used by the administrator, for example 203.0.113.10/32.
+admin_cidr = "203.0.113.10/32"
+
+# Select exact values shown in the ECS free-trial order page for cn-hongkong.
+instance_type = "REPLACE_WITH_FREE_TRIAL_INSTANCE_TYPE"
+image_id      = "REPLACE_WITH_UBUNTU_22_04_IMAGE_ID"
+
+# Public key only. Never add the matching private key to this repository or Terraform state.
+ssh_public_key = "ssh-ed25519 REPLACE_WITH_PUBLIC_KEY bookstore-admin"
+
+# OSS bucket names are globally unique. Use the local-redundancy 20 GB free trial.
+oss_bucket_name = "bookstore-demo-REPLACE_WITH_UNIQUE_SUFFIX"
+
+# Keep false until the ALB trial is activated and its automatically created resources are ready to import.
+enable_alb = false

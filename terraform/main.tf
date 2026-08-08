@@ -35,6 +35,7 @@ module "compute" {
   image_id                   = var.image_id
   ssh_public_key             = var.ssh_public_key
   internet_max_bandwidth_out = var.internet_max_bandwidth_out
+  system_disk_category       = var.system_disk_category
   system_disk_size           = var.system_disk_size
   k3s_version                = var.k3s_version
   tags                       = local.common_tags

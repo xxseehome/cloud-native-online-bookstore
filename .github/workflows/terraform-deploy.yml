@@ -45,6 +45,7 @@ jobs:
       TF_VAR_k3s_api_ingress_cidrs: ${{ vars.TF_K3S_API_INGRESS_CIDRS }}
       TF_VAR_instance_type: ${{ vars.TF_INSTANCE_TYPE }}
       TF_VAR_image_id: ${{ vars.TF_IMAGE_ID }}
+      TF_VAR_system_disk_category: ${{ vars.TF_SYSTEM_DISK_CATEGORY }}
       TF_VAR_internet_max_bandwidth_out: ${{ vars.TF_INTERNET_MAX_BANDWIDTH_OUT }}
       TF_VAR_oss_bucket_name: ${{ vars.TF_OSS_BUCKET_NAME }}
       TF_VAR_enable_alb: ${{ vars.TF_ENABLE_ALB }}
@@ -67,7 +68,7 @@ jobs:
             ALICLOUD_APPLY_ROLE_ARN \
             TF_VAR_availability_zones TF_VAR_vpc_cidr TF_VAR_vswitch_cidrs \
             TF_VAR_ssh_ingress_cidrs TF_VAR_k3s_api_ingress_cidrs \
-            TF_VAR_instance_type TF_VAR_image_id \
+            TF_VAR_instance_type TF_VAR_image_id TF_VAR_system_disk_category \
             TF_VAR_internet_max_bandwidth_out \
             TF_VAR_oss_bucket_name TF_VAR_enable_alb TF_VAR_ssh_public_key; do
             if [[ -z "${!name}" ]]; then

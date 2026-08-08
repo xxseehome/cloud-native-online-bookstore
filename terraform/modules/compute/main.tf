@@ -14,7 +14,7 @@ resource "alicloud_instance" "k3s" {
   instance_charge_type       = "PostPaid"
   internet_charge_type       = "PayByTraffic"
   internet_max_bandwidth_out = var.internet_max_bandwidth_out
-  system_disk_category       = "cloud_essd"
+  system_disk_category       = var.system_disk_category
   system_disk_size           = var.system_disk_size
   stopped_mode               = "StopCharging"
   http_tokens                = "required"

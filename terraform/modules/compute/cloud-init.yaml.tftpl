@@ -1,0 +1,24 @@
+#cloud-config
+package_update: true
+packages:
+  - ca-certificates
+  - curl
+
+write_files:
+  - path: /etc/sysctl.d/90-k3s.conf
+    permissions: "0644"
+    content: |
+      net.ipv4.ip_forward = 1
+      net.bridge.bridge-nf-call-iptables = 1
+  - path: /etc/rancher/k3s/config.yaml
+    permissions: "0600"
+    content: |
+      write-kubeconfig-mode: "0640"
+      node-label:
+        - "platform=online-bookstore"
+        - "environment=shared"
+
+runcmd:
+  - [sysctl, --system]
+  - [sh, -c, "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION='${k3s_version}' INSTALL_K3S_EXEC='server' sh -"]
+  - [sh, -c, "systemctl is-active --quiet k3s"]

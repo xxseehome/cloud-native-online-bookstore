@@ -1,0 +1,18 @@
+.DS_Store
+
+# Terraform working data and local plans
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Local variable files may contain account-specific values.
+*.tfvars
+*.tfvars.json
+!*.tfvars.example

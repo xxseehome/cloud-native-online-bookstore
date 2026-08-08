@@ -24,7 +24,12 @@ User
 
 ## Infrastructure as Code
 
-- Terraform
+- Terraform modules for VPC, ECS/K3s, OSS, and optional ALB
+- Pull-request formatting, validation, and mocked infrastructure tests
+- Cost-safe defaults that do not apply cloud resources from CI
+
+See [Terraform Foundation](terraform/README.md) for the module layout, free-trial
+constraints, and the staged deployment workflow.
 
 ## CI/CD
 

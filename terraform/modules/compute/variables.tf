@@ -27,6 +27,10 @@ variable "internet_max_bandwidth_out" {
   type = number
 }
 
+variable "system_disk_category" {
+  type = string
+}
+
 variable "system_disk_size" {
   type = number
 }

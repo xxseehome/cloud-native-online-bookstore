@@ -111,6 +111,16 @@ variable "system_disk_size" {
   }
 }
 
+variable "system_disk_category" {
+  description = "ECS system disk category. It must match an adopted instance to avoid replacement."
+  type        = string
+
+  validation {
+    condition     = contains(["cloud_efficiency", "cloud_ssd", "cloud_essd", "cloud_essd_entry"], var.system_disk_category)
+    error_message = "system_disk_category must be a supported Alibaba Cloud disk category."
+  }
+}
+
 variable "k3s_version" {
   description = "Pinned K3s release installed by cloud-init."
   type        = string

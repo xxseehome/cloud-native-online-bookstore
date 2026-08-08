@@ -18,6 +18,7 @@ instance_type = "ecs.e-c1m2.large"
 image_id      = "ubuntu_22_04_x64_20G_alibase_20260723.vhd"
 
 internet_max_bandwidth_out = 100
+system_disk_category       = "cloud_essd_entry"
 
 # Public key only. Never add the matching private key to this repository or Terraform state.
 ssh_public_key = "ssh-ed25519 REPLACE_WITH_PUBLIC_KEY bookstore-admin"

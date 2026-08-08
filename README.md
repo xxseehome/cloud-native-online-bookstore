@@ -29,6 +29,8 @@ User
 ## CI/CD
 
 - GitHub Actions
+- Trunk-based development with short-lived feature branches
+- Immutable image promotion between environments
 
 ## Container
 
@@ -41,10 +43,25 @@ User
 - Trivy
 - Open Policy Agent (OPA)
 
-## Environments
+## Environments and Promotion
 
-- Development
-- Test
-- Performance
-- Staging
-- Production
+The platform provides five logical application environments organized into three
+promotion stages:
+
+1. **Non-production**
+   - Development
+   - Test
+2. **Pre-production**
+   - Performance
+   - Staging
+3. **Production**
+   - Production
+
+The environments share a K3s cluster and are isolated with Kubernetes namespaces.
+A container image is built once and promoted between environments using the same
+immutable commit SHA. Environment-specific branches and image rebuilds are not
+used.
+
+Staging and production deployments require approval. See
+[Environment Strategy](docs/environment-strategy.md) for the namespace,
+promotion, and branching model.

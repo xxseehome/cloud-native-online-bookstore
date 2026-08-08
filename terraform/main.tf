@@ -15,13 +15,14 @@ check "alb_requires_two_zones" {
 module "network" {
   source = "./modules/network"
 
-  name_prefix        = local.name_prefix
-  vpc_cidr           = var.vpc_cidr
-  availability_zones = var.availability_zones
-  vswitch_cidrs      = var.vswitch_cidrs
-  admin_cidr         = var.admin_cidr
-  web_ingress_cidr   = var.enable_alb ? var.vpc_cidr : "0.0.0.0/0"
-  tags               = local.common_tags
+  name_prefix           = local.name_prefix
+  vpc_cidr              = var.vpc_cidr
+  availability_zones    = var.availability_zones
+  vswitch_cidrs         = var.vswitch_cidrs
+  ssh_ingress_cidrs     = var.ssh_ingress_cidrs
+  k3s_api_ingress_cidrs = var.k3s_api_ingress_cidrs
+  web_ingress_cidr      = var.enable_alb ? var.vpc_cidr : "0.0.0.0/0"
+  tags                  = local.common_tags
 }
 
 module "compute" {

@@ -38,13 +38,33 @@ variable "vpc_cidr" {
   default     = "10.20.0.0/16"
 }
 
-variable "admin_cidr" {
-  description = "Trusted administrator IPv4 CIDR allowed to use SSH and the K3s API. Never use 0.0.0.0/0."
-  type        = string
+variable "ssh_ingress_cidrs" {
+  description = "Restricted IPv4 CIDRs allowed to reach SSH. Use Alibaba Cloud Workbench ranges or trusted administrator networks, never 0.0.0.0/0."
+  type        = list(string)
 
   validation {
-    condition     = var.admin_cidr != "0.0.0.0/0" && can(cidrhost(var.admin_cidr, 0))
-    error_message = "admin_cidr must be a valid restricted IPv4 CIDR and cannot be 0.0.0.0/0."
+    condition = (
+      length(var.ssh_ingress_cidrs) > 0 &&
+      alltrue([
+        for cidr in var.ssh_ingress_cidrs :
+        cidr != "0.0.0.0/0" && can(cidrhost(cidr, 0))
+      ])
+    )
+    error_message = "ssh_ingress_cidrs must contain valid restricted IPv4 CIDRs and cannot include 0.0.0.0/0."
+  }
+}
+
+variable "k3s_api_ingress_cidrs" {
+  description = "Restricted IPv4 CIDRs allowed to reach the K3s API. Keep empty when kubectl runs on the node."
+  type        = list(string)
+  default     = []
+
+  validation {
+    condition = alltrue([
+      for cidr in var.k3s_api_ingress_cidrs :
+      cidr != "0.0.0.0/0" && can(cidrhost(cidr, 0))
+    ])
+    error_message = "k3s_api_ingress_cidrs must contain only valid restricted IPv4 CIDRs and cannot include 0.0.0.0/0."
   }
 }
 
@@ -75,8 +95,8 @@ variable "internet_max_bandwidth_out" {
   default     = 5
 
   validation {
-    condition     = var.internet_max_bandwidth_out >= 1 && var.internet_max_bandwidth_out <= 20
-    error_message = "internet_max_bandwidth_out must be between 1 and 20 Mbit/s for this demo."
+    condition     = var.internet_max_bandwidth_out >= 1 && var.internet_max_bandwidth_out <= 100
+    error_message = "internet_max_bandwidth_out must be between 1 and 100 Mbit/s for this demo."
   }
 }
 

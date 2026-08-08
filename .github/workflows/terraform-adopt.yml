@@ -1,13 +1,12 @@
-name: Terraform Deploy
+name: Terraform Adopt Existing Resources
 
 on:
   workflow_dispatch:
     inputs:
-      apply:
-        description: Apply the reviewed plan after environment approval
+      confirm_instance_id:
+        description: Type the existing ECS instance ID to confirm state-only adoption
         required: true
-        type: boolean
-        default: false
+        type: string
 
 permissions:
   contents: read
@@ -27,14 +26,18 @@ env:
   TF_STATE_TABLESTORE_TABLE: ${{ vars.TF_STATE_TABLESTORE_TABLE }}
   ALICLOUD_REGION: ${{ vars.ALICLOUD_REGION }}
   ALICLOUD_OIDC_PROVIDER_ARN: ${{ vars.ALICLOUD_OIDC_PROVIDER_ARN }}
-  ALICLOUD_PLAN_ROLE_ARN: ${{ vars.ALICLOUD_PLAN_ROLE_ARN }}
   ALICLOUD_APPLY_ROLE_ARN: ${{ vars.ALICLOUD_APPLY_ROLE_ARN }}
+  EXISTING_VPC_ID: ${{ vars.TF_EXISTING_VPC_ID }}
+  EXISTING_VSWITCH_ID: ${{ vars.TF_EXISTING_VSWITCH_ID }}
+  EXISTING_SECURITY_GROUP_ID: ${{ vars.TF_EXISTING_SECURITY_GROUP_ID }}
+  EXISTING_INSTANCE_ID: ${{ vars.TF_EXISTING_INSTANCE_ID }}
+  CONFIRM_INSTANCE_ID: ${{ inputs.confirm_instance_id }}
 
 jobs:
-  plan:
-    name: Plan
+  adopt:
+    name: Approved state adoption
     runs-on: ubuntu-latest
-    environment: terraform-plan
+    environment: terraform-apply
     defaults:
       run:
         working-directory: terraform
@@ -55,24 +58,29 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v5
 
-      - name: Restrict deployments to main
+      - name: Restrict adoption to main
         run: test "$GITHUB_REF" = "refs/heads/main"
 
-      - name: Check required configuration
+      - name: Validate explicit confirmation and configuration
         shell: bash
         run: |
+          if [[ "${CONFIRM_INSTANCE_ID}" != "${EXISTING_INSTANCE_ID}" ]]; then
+            echo "::error::Confirmation must exactly match TF_EXISTING_INSTANCE_ID."
+            exit 1
+          fi
+
           missing=0
           for name in \
             TF_STATE_BUCKET TF_STATE_KEY TF_STATE_REGION \
-            TF_STATE_TABLESTORE_ENDPOINT \
-            TF_STATE_TABLESTORE_TABLE ALICLOUD_REGION \
-            ALICLOUD_OIDC_PROVIDER_ARN ALICLOUD_PLAN_ROLE_ARN \
-            ALICLOUD_APPLY_ROLE_ARN \
+            TF_STATE_TABLESTORE_ENDPOINT TF_STATE_TABLESTORE_TABLE \
+            ALICLOUD_REGION ALICLOUD_OIDC_PROVIDER_ARN ALICLOUD_APPLY_ROLE_ARN \
+            EXISTING_VPC_ID EXISTING_VSWITCH_ID \
+            EXISTING_SECURITY_GROUP_ID EXISTING_INSTANCE_ID \
             TF_VAR_availability_zones TF_VAR_vpc_cidr TF_VAR_vswitch_cidrs \
             TF_VAR_ssh_ingress_cidrs TF_VAR_k3s_api_ingress_cidrs \
             TF_VAR_instance_type TF_VAR_image_id \
-            TF_VAR_internet_max_bandwidth_out \
-            TF_VAR_oss_bucket_name TF_VAR_enable_alb TF_VAR_ssh_public_key; do
+            TF_VAR_internet_max_bandwidth_out TF_VAR_oss_bucket_name \
+            TF_VAR_enable_alb TF_VAR_ssh_public_key; do
             if [[ -z "${!name}" ]]; then
               echo "::error::Missing GitHub configuration: ${name}"
               missing=1
@@ -89,8 +97,8 @@ jobs:
         uses: aliyun/configure-aliyun-credentials-action@1e5248c8d5d93a8781ac344a68e19a43341e79e6
         with:
           oidc-provider-arn: ${{ env.ALICLOUD_OIDC_PROVIDER_ARN }}
-          role-to-assume: ${{ env.ALICLOUD_PLAN_ROLE_ARN }}
-          role-session-name: github-terraform-plan
+          role-to-assume: ${{ env.ALICLOUD_APPLY_ROLE_ARN }}
+          role-session-name: github-terraform-adopt
           role-session-expiration: 1800
           audience: sts.aliyuncs.com
 
@@ -105,74 +113,44 @@ jobs:
             -backend-config="tablestore_endpoint=${TF_STATE_TABLESTORE_ENDPOINT}" \
             -backend-config="tablestore_table=${TF_STATE_TABLESTORE_TABLE}"
 
-      - name: Create execution plan
-        run: terraform plan -lock-timeout=5m -out=tfplan
+      - name: Import existing resources into state
+        shell: bash
+        run: |
+          set -euo pipefail
 
-      - name: Add plan to the run summary
+          import_if_missing() {
+            local address="$1"
+            local expected_id="$2"
+
+            if terraform state list | grep -Fqx "$address"; then
+              local current_id
+              current_id="$(terraform state show -no-color "$address" | awk '$1 == "id" && $2 == "=" { gsub(/\"/, "", $3); print $3; exit }')"
+              if [[ "$current_id" != "$expected_id" ]]; then
+                echo "::error::${address} already tracks ${current_id}, expected ${expected_id}."
+                exit 1
+              fi
+              echo "${address} already tracks ${expected_id}; skipping."
+              return
+            fi
+
+            terraform import -lock-timeout=5m "$address" "$expected_id"
+          }
+
+          import_if_missing 'module.network.alicloud_vpc.this' "$EXISTING_VPC_ID"
+          import_if_missing 'module.network.alicloud_vswitch.this[0]' "$EXISTING_VSWITCH_ID"
+          import_if_missing 'module.network.alicloud_security_group.k3s' "$EXISTING_SECURITY_GROUP_ID"
+          import_if_missing 'module.compute.alicloud_instance.k3s' "$EXISTING_INSTANCE_ID"
+
+      - name: Summarize adopted state
         run: |
           {
-            echo "### Terraform plan"
+            echo "### Adopted Terraform state"
+            echo
+            echo "This workflow changed Terraform state only. It did not run terraform apply."
+            echo
             echo '```text'
-            terraform show -no-color tfplan
+            terraform state list
             echo '```'
+            echo
+            echo "Next: run **Terraform Deploy** with **Apply** unchecked and review every proposed change."
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Upload immutable plan
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-plan-${{ github.sha }}-${{ github.run_id }}
-          path: terraform/tfplan
-          if-no-files-found: error
-          retention-days: 1
-
-  apply:
-    name: Approval and apply
-    if: ${{ inputs.apply && needs.plan.result == 'success' }}
-    needs: plan
-    runs-on: ubuntu-latest
-    environment: terraform-apply
-    defaults:
-      run:
-        working-directory: terraform
-    steps:
-      - name: Checkout the planned revision
-        uses: actions/checkout@v5
-        with:
-          ref: ${{ github.sha }}
-
-      - name: Restrict deployments to main
-        run: test "$GITHUB_REF" = "refs/heads/main"
-
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.15.5"
-
-      - name: Authenticate to Alibaba Cloud with OIDC
-        uses: aliyun/configure-aliyun-credentials-action@1e5248c8d5d93a8781ac344a68e19a43341e79e6
-        with:
-          oidc-provider-arn: ${{ env.ALICLOUD_OIDC_PROVIDER_ARN }}
-          role-to-assume: ${{ env.ALICLOUD_APPLY_ROLE_ARN }}
-          role-session-name: github-terraform-apply
-          role-session-expiration: 1800
-          audience: sts.aliyuncs.com
-
-      - name: Initialize encrypted remote state with locking
-        run: |
-          terraform init \
-            -backend-config="bucket=${TF_STATE_BUCKET}" \
-            -backend-config="key=${TF_STATE_KEY}" \
-            -backend-config="region=${TF_STATE_REGION}" \
-            -backend-config="encrypt=true" \
-            -backend-config="acl=private" \
-            -backend-config="tablestore_endpoint=${TF_STATE_TABLESTORE_ENDPOINT}" \
-            -backend-config="tablestore_table=${TF_STATE_TABLESTORE_TABLE}"
-
-      - name: Download the approved plan
-        uses: actions/download-artifact@v4
-        with:
-          name: terraform-plan-${{ github.sha }}-${{ github.run_id }}
-          path: terraform
-
-      - name: Apply the approved plan
-        run: terraform apply -lock-timeout=5m -auto-approve tfplan

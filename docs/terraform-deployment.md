@@ -1,14 +1,131 @@
-þŠmþ&yºÞÃòân¶«Ëñè™æë{Ü™ßì…éez{ì†X§{_?n)ÿ¦Ã©z¶­Š‰ç¢Ú^®h­µçHÈ\œ˜Y›Ü›H\Þ[Y[œ›ÛHÚ]X‚‚•H[™œ˜\ÝXÝ\™H\[[™H[œÈ[\™[HÛˆÚ]X‹ZÜÝY[›™\œËˆ]\Ù\ÂœÚÜ[]™Y[X˜X˜HÛÝYÜ™Y[X[ÈØZ[™Y›ÝYÚÚ]XˆÒQËÝÜ™\ÈÝ]Bš[ˆ[˜Üž\YÔÔËØÚÜÈÝ]HÚ]X›\ÝÜ™K[™]\Ù\È™Y›Ü™H\X]Bœ›ÝXÝYÚ]Xˆ[š\›Û›Y[‚‚“›È[X˜X˜HÛÝYXØÙ\ÜÒÙ^H\ÈÝÜ™Y[ˆÚ]X‹‚‚ˆÈÈ\[[™B‚˜^ÛÜšÙ›Ý×Ù\Ü]ÚÛˆXZ[‚ˆˆ‚\œ˜Y›Ü›K\[ˆ[š\›Û›Y[ˆˆ
-ËKHÚ]XˆÒQÈOˆ™XY[Û›HSH›ÛBˆ
-ËKH™[[ÝHÔÔÈÝ]H
-ÈX›\ÝÜ™HØÚÂˆ
-ËKH\œ˜Y›Ü›H[‚ˆ
-ËKHÛ™KY^H[[]]X›H[ˆ\Y˜XÝˆˆ‚\œ˜Y›Ü›KX\H[š\›Û›Y[ˆˆ
-ËKH™\]Z\™Y™]šY]Ù\ˆ\›Ý˜[ˆ
-ËKHÚ]XˆÒQÈOˆ\Þ[Y[SH›ÛBˆ
-ËKH\HH^XÝØ]™Y[‚˜‚•H\XÛÜšÙ›ÝÈ[œ]Y˜][ÈÈ˜[ÙXˆH[‹[Û›H[ˆ™]™\ˆ[\œÈB˜\›Ý˜[Üˆ\H›Ø‹‚‚ˆÈÈKˆ›ÛÝÝ˜\™[[ÝHÝ]H[ˆ[X˜X˜HÛÝY‚Ü™X]H\ÙHÛ˜ÙH[ˆH[X˜X˜HÛÝYÛÛœÛÛN‚‚ŒKˆHYXØ]Yš]˜]HÔÔÈXÚÙ]›Üˆ\œ˜Y›Ü›HÝ]NÂŒ‹ˆ™\œÚ[Ûš[™È[™QTÌMˆÙ\™\‹\ÚYH[˜Üž\[ÛˆÛˆHXÚÙ]ÂŒËˆHX›\ÝÜ™H[œÝ[˜ÙH[ˆHØ[YH™YÚ[ÛŽÂˆHX›\ÝÜ™HX›HÚÜÙHš[X\žHÙ^H\È˜[YYØÚÒQ[™\È\HÝš[™Ø‚‚‘È›Ý™]\ÙHH\XØ][Ûˆ\ÜÙ]XÚÙ]ˆ™\ÝšXÝHÝ]HXÚÙ][™ØÚÂX›HÈH\œ˜Y›Ü›HSH›Û\È[™XØÛÝ[YZ[š\Ý˜]ÜœË‚‚ˆÈÈ‹ˆÛÛ™šYÝ\™HÚ]Xˆ\È[ˆ[X˜X˜HÛÝYÒQÈY[]H›ÝšY\‚‚’[ˆ[X˜X˜HÛÝYSKÜ™X]H[ˆÒQÈY[]H›ÝšY\ˆÚ]‚‚‹H\ÜÝY\ˆT“ˆÎ‹ËÝÚÙ[‹˜XÝ[ÛœË™Ú]X\Ù\˜ÛÛ[˜ÛÛXÂ‹H]YY[˜ÙNˆÝË˜[^][˜ÜË˜ÛÛXÂ‹HHÚYÛš[™ÈÙ^\È\ØÛÝ™\™Yœ›ÛHH\ÜÝY\ˆY]Y]K‚‚Ü™X]HÛÈSH›Û\È]\Ý\È›ÝšY\Ž‚‚‹HH[ˆ›ÛHÚ]™XY[Û›H™\ÛÝ\˜ÙHXØÙ\ÜÈ\ÈHÔÔËÕX›\ÝÜ™H\›Z\ÜÚ[ÛœÂˆ™\]Z\™YÈ™XY[™ØÚÈÝ]NÂ‹H[ˆ\H›ÛHÚ]Û›HH”ËPÔËÔÔËS‹SHÙ^K\Z\‹[™Ý]HXØÙ\ÜÂˆ™\]Z\™YžH\È™\ÜÚ]ÜžK‚‚”™\ÝšXÝH›ÛH\ÝÛÛ™][ÛœÈÈ\ÙH^XÝÚ]XˆÒQÈÝXš™XÝÎ‚‚˜^œ™\ÎžÙYZÛYKØÛÝY[˜]]™K[Û›[™KX›ÛÚÜÝÜ™N™[š\›Û›Y[\œ˜Y›Ü›K\[‚œ™\ÎžÙYZÛYKØÛÝY[˜]]™K[Û›[™KX›ÛÚÜÝÜ™N™[š\›Û›Y[\œ˜Y›Ü›KX\B˜‚‘È›Ý]XÚYZ[š\Ý˜]ÜXØÙ\ÜØÈZ]\ˆ›ÛK‚‚ˆÈÈËˆÛÛ™šYÝ\™HÚ]Xˆ[š\›Û›Y[Â‚’[ˆ
-Š”Ù][™ÜÈOˆ[š\›Û›Y[ÊŠ‹Ü™X]N‚‚ˆÈÈÈ\œ˜Y›Ü›K\[˜‚‹H[ÝÈ\Þ[Y[ÈÛ›Hœ›ÛHXZ[˜Â‹H›È™\]Z\™Y™]šY]Ù\ˆ\È™XÙ\ÜØ\žNÂ‹HÝÜ™HH—ÔÔÒÔP“P×ÒÑVX[š\›Û›Y[ÙXÜ™]\™K‚‚ˆÈÈÈ\œ˜Y›Ü›KX\X‚‹H[ÝÈ\Þ[Y[ÈÛ›Hœ›ÛHXZ[˜Â‹HYH™\]Z\™Y™]šY]Ù\ŽÂ‹HÙY\Ù[‹\™]šY]È\ØX›YÚ[ˆHÙXÛÛ™™]šY]Ù\ˆ\È]˜Z[X›K‚‚•H\H›ØˆØ[››ÝÝ\[[\È[š\›Û›Y[\›Ý™\È]‚‚ˆÈÈˆÛÛ™šYÝ\™H™\ÜÚ]ÜžH˜\šXX›\Â‚’[ˆ
-Š”Ù][™ÜÈOˆÙXÜ™]È[™˜\šXX›\ÈOˆXÝ[ÛœÈOˆ˜\šXX›\ÊŠ‹Y‚‚Ÿ˜\šXX›H^[\HÜˆYX[š[™ÈŸKKHKKHŸSPÓÕQÔ‘QÒSÓ˜Û‹ZÛ™ÚÛÛ™ØŸSPÓÕQÓÒQ×Ô“Õ’QT—ÐT“˜SHÒQÈ›ÝšY\ˆT“ˆŸSPÓÕQÔS—Ô“ÓWÐT“˜™XY[Û›H\œ˜Y›Ü›H›ÛHT“ˆŸSPÓÕQÐTWÔ“ÓWÐT“˜\œ˜Y›Ü›H\Þ[Y[›ÛHT“ˆŸ—ÔÕUWÐ•PÒÑUYXØ]YÝ]HXÚÙ]˜[YHŸ—ÔÕUWÒÑVXÚ\™YÝ\œ˜Y›Ü›KœÝ]XŸ—ÔÕUWÕP“TÕÔ‘WÑS‘ÒS•È[™Ú[ÙˆHØÚÈ[œÝ[˜ÙHŸ—ÔÕUWÕP“TÕÔ‘WÕP“XØÚÈX›H˜[YHŸ—ÐURSP’SUWÖ“Ó‘TØÈ˜Û‹ZÛ™ÚÛÛ™ËXˆ‹˜Û‹ZÛ™ÚÛÛ™ËXÈ—XŸ—Õ”ÕÒUÒÐÒQ”ØÈŒLŒŒŒKŒÌ‹ŒLŒŒŒ‹ŒÌ—XŸ—ÐQRS—ÐÒQ˜[Ý\ˆÝ\œ™[X›XÈTY™\ÜÈÚ]ÌÌ˜Ÿ—ÒS”ÕSÑWÕTX^XÝPÔÈœ™YK]šX[[œÝ[˜ÙH\HŸ—ÒSPQÑWÒQ^XÝX[H[XYÙHQ[ˆHÙ[XÝY™YÚ[ÛˆŸ—ÓÔÔ×Ð•PÒÑUÓSQXÛØ˜[H[š\]YH\XØ][ÛˆXÚÙ]˜[YHŸ—ÑSP“WÐS˜˜[ÙX[[HSˆšX[Ú[\Ü\È™XYH‚’”ÓÓˆ\Ý˜[Y\È]\Ý™[XZ[ˆ˜[Y”ÓÓ‹[˜ÛY[™ÈHœ˜XÚÙ]È[™][Ý\Ë‚‚ˆÈÈKˆ[ˆœ›ÛHHÚ]XˆÙXœÚ]B‚ŒKˆÜ[ˆ
-ŠXÝ[ÛœÈOˆ\œ˜Y›Ü›H\ÞHOˆ[ˆÛÜšÙ›ÝÊŠ‹‚Œ‹ˆÙ[XÝXZ[˜[™X]™H
-Š\JŠˆ[˜ÚXÚÙY‚ŒËˆ™]šY]ÈH[ˆ[ˆH[ˆÝ[[X\žK‚ˆY\ˆH[ˆ\ÈÛÜÝ\ØY™K[ˆHÛÜšÙ›ÝÈYØZ[ˆÚ]
-Š\JŠˆÚXÚÙY‚Kˆ™]šY]È[™\›Ý™HH\œ˜Y›Ü›KX\X[š\›Û›Y[\Þ[Y[‚‚•H[ˆ\Y˜XÝ^\™\ÈY\ˆÛ™H^H[™H\H›ØˆÛÛœÝ[Y\ÈH^XÝ[‚˜Ü™X]YX\›Y\ˆ[ˆHØ[YHÛÜšÙ›ÝÈ[‹‚‚ˆÈÈØY™]H›Ý[™\šY\Â‚‹H[™\]Y\ÝÈ™]™\ˆ™XÙZ]™HÛÝYÜ™Y[X[È[™Ø[››Ý\H™\ÛÝ\˜Ù\Ë‚‹HÛ›HX[X[H\Ü]ÚY[œÈœ›ÛHXZ[˜\™HXØÙ\Y‚‹HÚ]XˆÙ\šX[^™\È\ÈÚ\™Y[™œ˜\ÝXÝ\™H\[[™NÈ[œÈ\™H™]™\ˆØ[˜Ù[YˆÚ[H[ˆ\HX^H™H[ˆ›ÙÜ™\ÜË‚‹HÒQÈÜ™Y[X[È^\™HY\ˆÌZ[]\Ë‚‹H™[[ÝHÝ]H\Èš]˜]K[˜Üž\Y™\œÚ[Û™Y[™ØÚÙY‚‹HSˆ™[XZ[œÈ\ØX›YžHY˜][[[]ÈšX[™\ÛÝ\˜Ù\ÈØ[ˆ™H[\ÜY‚
+# Terraform Deployment from GitHub
+
+The infrastructure pipeline runs entirely on GitHub-hosted runners. It uses
+short-lived Alibaba Cloud credentials obtained through GitHub OIDC, stores state
+in encrypted OSS, locks state with Tablestore, and pauses before `apply` at a
+protected GitHub Environment.
+
+No Alibaba Cloud AccessKey is stored in GitHub.
+
+## Pipeline
+
+```text
+workflow_dispatch on main
+        |
+        v
+terraform-plan environment
+        |
+        +-- GitHub OIDC -> read-only RAM role
+        +-- remote OSS state + Tablestore lock
+        +-- terraform plan
+        +-- one-day immutable plan artifact
+        |
+        v
+terraform-apply environment
+        |
+        +-- required reviewer approval
+        +-- GitHub OIDC -> deployment RAM role
+        +-- apply the exact saved plan
+```
+
+The `apply` workflow input defaults to `false`. A plan-only run never enters the
+approval or apply job.
+
+## 1. Bootstrap remote state in Alibaba Cloud
+
+Create these once in the Alibaba Cloud console:
+
+1. a dedicated private OSS bucket for Terraform state;
+2. versioning and AES256 server-side encryption on the bucket;
+3. a Tablestore instance in the same region;
+4. a Tablestore table whose primary key is named `LockID` and has type `String`.
+
+Do not reuse the application asset bucket. Restrict the state bucket and lock
+table to the Terraform RAM roles and account administrators.
+
+## 2. Configure GitHub as an Alibaba Cloud OIDC identity provider
+
+In Alibaba Cloud RAM, create an OIDC identity provider with:
+
+- issuer URL: `https://token.actions.githubusercontent.com`;
+- audience: `sts.aliyuncs.com`;
+- the signing keys discovered from the issuer metadata.
+
+Create two RAM roles that trust this provider:
+
+- a plan role with read-only resource access plus the OSS/Tablestore permissions
+  required to read and lock state;
+- an apply role with only the VPC, ECS, OSS, ALB, RAM key-pair, and state access
+  required by this repository.
+
+Restrict the role trust conditions to these exact GitHub OIDC subjects:
+
+```text
+repo:xxseehome/cloud-native-online-bookstore:environment:terraform-plan
+repo:xxseehome/cloud-native-online-bookstore:environment:terraform-apply
+```
+
+Do not attach `AdministratorAccess` to either role.
+
+## 3. Configure GitHub Environments
+
+In **Settings -> Environments**, create:
+
+### `terraform-plan`
+
+- allow deployments only from `main`;
+- no required reviewer is necessary;
+- store the `TF_SSH_PUBLIC_KEY` environment secret here.
+
+### `terraform-apply`
+
+- allow deployments only from `main`;
+- add a required reviewer;
+- keep self-review disabled when a second reviewer is available.
+
+The apply job cannot start until this environment approves it.
+
+## 4. Configure repository variables
+
+In **Settings -> Secrets and variables -> Actions -> Variables**, add:
+
+| Variable | Example or meaning |
+| --- | --- |
+| `ALICLOUD_REGION` | `cn-hongkong` |
+| `ALICLOUD_OIDC_PROVIDER_ARN` | RAM OIDC provider ARN |
+| `ALICLOUD_PLAN_ROLE_ARN` | Read-only Terraform role ARN |
+| `ALICLOUD_APPLY_ROLE_ARN` | Terraform deployment role ARN |
+| `TF_STATE_BUCKET` | Dedicated state bucket name |
+| `TF_STATE_KEY` | `shared/terraform.tfstate` |
+| `TF_STATE_TABLESTORE_ENDPOINT` | HTTPS endpoint of the lock instance |
+| `TF_STATE_TABLESTORE_TABLE` | Lock table name |
+| `TF_AVAILABILITY_ZONES` | `["cn-hongkong-b","cn-hongkong-c"]` |
+| `TF_VSWITCH_CIDRS` | `["10.20.1.0/24","10.20.2.0/24"]` |
+| `TF_ADMIN_CIDR` | Your current public IPv4 address with `/32` |
+| `TF_INSTANCE_TYPE` | Exact ECS free-trial instance type |
+| `TF_IMAGE_ID` | Exact Ubuntu image ID in the selected region |
+| `TF_OSS_BUCKET_NAME` | Globally unique application bucket name |
+| `TF_ENABLE_ALB` | `false` until the ALB trial/import is ready |
+
+JSON list values must remain valid JSON, including the brackets and quotes.
+
+## 5. Run from the GitHub website
+
+1. Open **Actions -> Terraform Deploy -> Run workflow**.
+2. Select `main` and leave **Apply** unchecked.
+3. Review the plan in the run summary.
+4. After the plan is cost-safe, run the workflow again with **Apply** checked.
+5. Review and approve the `terraform-apply` environment deployment.
+
+The plan artifact expires after one day and the apply job consumes the exact plan
+created earlier in the same workflow run.
+
+## Safety boundaries
+
+- Pull requests never receive cloud credentials and cannot apply resources.
+- Only manually dispatched runs from `main` are accepted.
+- GitHub serializes this shared infrastructure pipeline; runs are never canceled
+  while an apply may be in progress.
+- OIDC credentials expire after 30 minutes.
+- Remote state is private, encrypted, versioned, and locked.
+- ALB remains disabled by default until its trial resources can be imported.

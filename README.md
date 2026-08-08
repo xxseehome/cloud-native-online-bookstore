@@ -1,11 +1,73 @@
-şŠmş&yºŞÃòân¶«Ëñè™æë{Ü™ßì…éez{ì†X§{_?n)ÿ¦Ã©z¶­Š‰ç¢Ú^®h­µçHÈÛİY˜]]™HÛ›[™H›ÛÚÈİÜ™B‚HÛİY[˜]]™HÛ›[™H›ÛÚÜİÜ™H]›Ü›HZ[Ûˆ[X˜X˜HÛİY[™İX™\›™]\Ë‚‚ˆÈÈ\˜Ú]Xİ\™B‚•H\XØ][Ûˆ\Ù\ÈH][K]Y\ˆ\˜Ú]Xİ\™N‚‚•\Ù\‚¸¡¤ˆØY˜[[˜Ù\‚¸¡¤ˆİX™\›™]\È[™Ü™\ÜÂ¸¡¤ˆœ›Û[™¸¡¤ˆ˜XÚÙ[™TB¸¡¤ˆ[X˜X˜HÛİYÔÔÂ‚ˆÈÈ]›Ü›B‚‹H[X˜X˜HÛİY‹H[\İXÈÛÛ\]HÙ\šXÙH
-PÔÊB‹Hš\X[š]˜]HÛİY
-”ÊB‹HİX™\›™]\Â‹HÌÜÂ‹HØš™XİİÜ˜YÙHÙ\šXÙH
-ÔÔÊB‚ˆÈÈ[™œ˜\İXİ\™H\ÈÛÙB‚‹H\œ˜Y›Ü›H[Ù[\È›Üˆ”ËPÔËÒÌÜËÔÔË[™Ü[Û˜[S‚‹H[\™\]Y\İ›Ü›X][™Ë˜[Y][Û‹[™[ØÚÙY[™œ˜\İXİ\™H\İÂ‹HÛÜİ\ØY™HY˜][È]È›İ\HÛİY™\Ûİ\˜Ù\Èœ›ÛHÒB‚”ÙYHÕ\œ˜Y›Ü›H›İ[™][Û—J\œ˜Y›Ü›KÔ‘PQQK›Y
-H›ÜˆH[Ù[H^[İ]œ™YK]šX[˜ÛÛœİ˜Z[Ë[™HİYÙY\Ş[Y[ÛÜšÙ›İË‚‚ˆÈÈÒKĞÑ‚‹HÚ]XˆXİ[ÛœÂ‹H[šËX˜\ÙY]™[ÜY[Ú]ÚÜ[]™Y™X]\™Hœ˜[˜Ú\Â‹H[[]]X›H[XYÙH›Û[İ[Ûˆ™]ÙY[ˆ[š\›Û›Y[Â‹H\œ˜Y›Ü›H[ˆ\Y˜XİÈÚ]›İXİYY[š\›Û›Y[\›İ˜[™Y›Ü™H\B‚ˆÈÈÛÛZ[™\‚‚‹HØÚÙ\‚‹HÚ]XˆÛÛZ[™\ˆ™YÚ\İH
-ÒÔŠB‚ˆÈÈÙXİ\š]B‚‹HÚ]XZÜÂ‹Hš]B‹HÜ[ˆÛXŞHYÙ[
-ÔJB‚ˆÈÈ[š\›Û›Y[È[™›Û[İ[Û‚‚•H]›Ü›H›İšY\Èš]™HÙÚXØ[\XØ][Ûˆ[š\›Û›Y[ÈÜ™Ø[š^™Y[È™YBœ›Û[İ[ÛˆİYÙ\Î‚‚ŒKˆ
-Š“›Û‹\›ÙXİ[ÛŠŠ‚ˆH]™[ÜY[ˆH\İŒ‹ˆ
-Š”™K\›ÙXİ[ÛŠŠ‚ˆH\™›Ü›X[˜ÙBˆHİYÚ[™ÂŒËˆ
-Š”›ÙXİ[ÛŠŠ‚ˆH›ÙXİ[Û‚‚•H[š\›Û›Y[ÈÚ\™HHÌÜÈÛ\İ\ˆ[™\™H\ÛÛ]YÚ]İX™\›™]\È˜[Y\ÜXÙ\Ë‚HÛÛZ[™\ˆ[XYÙH\ÈZ[Û˜ÙH[™›Û[İY™]ÙY[ˆ[š\›Û›Y[È\Ú[™ÈHØ[YBš[[]]X›HÛÛ[Z]ÒKˆ[š\›Û›Y[\ÜXÚYšXÈœ˜[˜Ú\È[™[XYÙH™XZ[È\™H›İ\ÙY‚‚”İYÚ[™È[™›ÙXİ[Ûˆ\Ş[Y[È™\]Z\™H\›İ˜[ˆÙYB–Ñ[š\›Û›Y[İ˜]YŞWJØÜËÙ[š\›Û›Y[\İ˜]YŞK›Y
-H›ÜˆH˜[Y\ÜXÙKœ›Û[İ[Û‹[™œ˜[˜Ú[™È[Ù[‚
+# Cloud Native Online Book Store
+
+A cloud-native online bookstore platform built on Alibaba Cloud and Kubernetes.
+
+## Architecture
+
+The application uses a multi-tier architecture:
+
+User
+â†’ Load Balancer
+â†’ Kubernetes Ingress
+â†’ Frontend
+â†’ Backend API
+â†’ Alibaba Cloud OSS
+
+## Platform
+
+- Alibaba Cloud
+- Elastic Compute Service (ECS)
+- Virtual Private Cloud (VPC)
+- Kubernetes
+- K3s
+- Object Storage Service (OSS)
+
+## Infrastructure as Code
+
+- Terraform modules for VPC, ECS/K3s, OSS, and optional ALB
+- Pull-request formatting, validation, and mocked infrastructure tests
+- Cost-safe defaults that do not apply cloud resources from CI
+
+See [Terraform Foundation](terraform/README.md) for the module layout, free-trial
+constraints, and the staged deployment workflow.
+
+## CI/CD
+
+- GitHub Actions
+- Trunk-based development with short-lived feature branches
+- Immutable image promotion between environments
+- Terraform plan artifacts with protected-environment approval before apply
+
+## Container
+
+- Docker
+- GitHub Container Registry (GHCR)
+
+## Security
+
+- Gitleaks
+- Trivy
+- Open Policy Agent (OPA)
+
+## Environments and Promotion
+
+The platform provides five logical application environments organized into three
+promotion stages:
+
+1. **Non-production**
+   - Development
+   - Test
+2. **Pre-production**
+   - Performance
+   - Staging
+3. **Production**
+   - Production
+
+The environments share a K3s cluster and are isolated with Kubernetes namespaces.
+A container image is built once and promoted between environments using the same
+immutable commit SHA. Environment-specific branches and image rebuilds are not
+used.
+
+Staging and production deployments require approval. See
+[Environment Strategy](docs/environment-strategy.md) for the namespace,
+promotion, and branching model.

@@ -1,3 +1,98 @@
-şŠmş&yºŞÃòân¶«Ëñè™æë{Ü™ßì…éez{ì†X§{_?n)ÿ¦Ã©z¶­Š‰ç¢Ú^®h­µçHÈ[X˜X˜HÛİY\œ˜Y›Ü›H›İ[™][Û‚‚•\È\™XİÜHYš[™\ÈHÛÜİXÛÛœØÚ[İ\È[X˜X˜HÛİY›İ[™][Ûˆ›ÜˆB“Û›[™H›ÛÚÈİÜ™H[[Ûœİ˜][Û‹ˆ]\È[[[Û˜[HØY™HÈ˜[Y]HÚ]İ]˜ÛİYÜ™Y[X[È[™Ù\È›İ[ˆ\œ˜Y›Ü›H\X[ˆ[™\]Y\İË‚‚ˆÈÈX[˜YÙY™\Ûİ\˜Ù\Â‚‹HÛ™H”ÎÂ‹HÛ™H”İÚ]Ú\ˆİ\YY]˜Z[Xš[]H›Û™NÂ‹HÛ™HÙXİ\š]HÜ›İ\Ú]™\İšXİYÔÒ[™ÌÜÈTHXØÙ\ÜÎÂ‹HÛ™H^KX\Ë^[İKYÛÈPÔÈ[œİ[˜ÙH›Ûİİ˜\Y\ÈHÚ[™ÛK[›ÙHÌÜÈÛ\İ\Â‹HÛ™Hš]˜]K[˜Ü\Y™\œÚ[Û™YÔÔÈXÚÙ]Â‹H[ˆÜ[Û˜[[\›™]Y˜XÚ[™ÈS‹\ØX›YHY˜][‚‚‘š]™H\XØ][Ûˆ[š\›Û›Y[È\™HİX™\›™]\È˜[Y\ÜXÙ\È[ˆ\ÈÚ\™YİXÚË‚•^H\™H›İš]™HÛÜY\ÈÙˆH[X˜X˜HÛİY[™œ˜\İXİ\™K‚‚ˆÈÈ[Ù[H^[İ]‚˜^\œ˜Y›Ü›KÂ¸¥'8¥ 8¥ [Ù[\ËÂ¸¥ ˆ8¥'8¥ 8¥ [‹ÈÈÜ[Û˜[Sˆ›İ[™][Û‚¸¥ ˆ8¥'8¥ 8¥ ÛÛ\]KÈÈPÔËÔÒÙ^H[™[›™YÌÜÈ›Ûİİ˜\¸¥ ˆ8¥'8¥ 8¥ ™]ÛÜšËÈÈ”Ë”İÚ]Ú\È[™ÙXİ\š]H[\Â¸¥ ˆ8¥%8¥ 8¥ İÜ˜YÙKÈÈš]˜]HÔÔÈXÚÙ]¸¥'8¥ 8¥ \İËÈÈ[ØÚË\›İšY\ˆØY™]H\İÂ¸¥%8¥ 8¥ 
-‹ˆÈÚ\™Y[[Ûœİ˜][ÛˆİXÚÂ˜‚ˆÈÈÛÜİÛÛ›ÛÂ‚‹H[˜X›WØ[˜Y˜][ÈÈ˜[ÙX‚‹HPÔÈ\Ù\ÈÜİZY^PU˜Y™šXØH›İ[™YYÜ™\ÜÈ˜]H[™ˆİÜÚ\™Ú[™ØÚ[ˆİÜY‚‹HÔÒ[™HÌÜÈTH™Z™XİŒŒŒÌ\ÈHYZ[š\İ˜]ÜˆÒQ‹‚‹HPÔÈ[™ÔÔÈ]™H™]™[Ù\İ›ŞXİX\™ÈYØZ[œİXØÚY[[]HÜÜË‚‹HSˆ™\]Z\™\ÈÛÈ]˜Z[Xš[]H›Û™\È[™[ÛÈ\È[][Ûˆ›İXİ[Û‹‚‹H›ÈUØ]]Ø^K‘ËPÒËÓÈÜˆZYÓTÈ[œİ[˜ÙH\ÈÜ™X]Y‚‹H[\™\]Y\İÒH[œÈÛ›H›Ü›X][™Ë[š]X[^˜][Û‹˜[Y][Ûˆ[™[ØÚÙYˆ[œËˆ]\È›È[X˜X˜HÛİYÜ™Y[X[È[™Ø[››İÜ™X]H™\Ûİ\˜Ù\Ë‚‚‘œ™YK]šX[[Z]È\™HXØÛİ[[][Y[Ë›İ\œ˜Y›Ü›HİX\˜[Y\ËˆÛÛ™š\›BHPÔËÔÔËS‹RT[™˜Y™šXÈ[™H][\È[ˆH[X˜X˜HÛİYÛÛœÛÛH™Y›Ü™B™]™\H™X[\K‚‚ˆÈÈ™\\™H˜[Y\È[ˆHœ›İÜÙ\‚‚ŒKˆ\ÙH[X˜X˜HÛİYÛİYÚ[ÈÙ[™\˜]H[ˆÔÒÙ^HYˆ™\]Z\™Y‚‚ˆÚ[ˆÜÚZÙ^YÙ[ˆ]YMLNHPÈ›ÛÚÜİÜ™KXYZ[‚ˆ‚Œ‹ˆÛÜHÛ›HHœX˜˜[YKˆÙY\Hš]˜]HÙ^Hİ]ÙˆÚ]Xˆ[™\œ˜Y›Ü›Bˆİ]K‚ŒËˆ[ˆHPÔÈœ™YK]šX[YÙK™XÛÜ™H^Xİ‹]ÔKÍQÚPˆ[œİ[˜ÙH\H[™ˆX[HŒ‹Œ—Í[XYÙHQ]˜Z[X›H[ˆÛ‹ZÛ™ÚÛÛ™Ø‚ˆÚÛÜÙHHÛØ˜[H[š\]YHÔÔÈXÚÙ]˜[YH›ÜˆHŒQĞˆØØ[\™Y[™[˜ŞBˆšX[‚KˆÛÜHH^[\HØØ[H[™™\XÙH]™\HXÙZÛ\‚‚ˆÚ[ˆÜ\œ˜Y›Ü›K˜\œË™^[\H\œ˜Y›Ü›K˜\œÂˆ‚˜\œ˜Y›Ü›K˜\œØ\ÈYÛ›Ü™YHÚ][™]\İ™]™\ˆ™HÛÛ[Z]Y‚‚ˆÈÈ˜[Y]HÚ]İ]Ü™X][™È™\Ûİ\˜Ù\Â‚˜Ú[\œ˜Y›Ü›H›]\™Xİ\œÚ]™B\œ˜Y›Ü›H[š]X˜XÚÙ[™Y˜[ÙB\œ˜Y›Ü›H˜[Y]B\œ˜Y›Ü›H\İ˜‚ÛİY\Ş[Y[\È[[[Û˜[HÙ\\˜]Hœ›ÛH[\™\]Y\İ˜[Y][Û‹ˆÙYB–Õ\œ˜Y›Ü›H\Ş[Y[œ›ÛHÚ]X—J‹‹ÙØÜËİ\œ˜Y›Ü›KY\Ş[Y[›Y
-H›ÜˆHÒQÂšY[]K™[[İHİ]K[ˆ\Y˜Xİ\›İ˜[[™ÛÛ›ÛY\HÛÜšÙ›İË‚‚ˆÈÈSˆšX[[\Ü]‚•H[X˜X˜HÛİYSˆšX[]]ÛX]XØ[HÜ™X]\È[ˆSˆ[™ÛÈRTËÚXÚ›YX[œÈ]Ø[››İ[š]X[H™HÜ™X]YH\ÈÛÛ™šYİ\˜][Û‹ˆY\ˆH”È[™”İÚ]Ú\È^\İ‚‚ŒKˆXİ]˜]HHSˆšX[YØZ[œİÜÙH”İÚ]Ú\ÎÂŒ‹ˆÙ][˜X›WØ[ˆHYXÂŒËˆ[\ÜHšX[Sˆ™Y›Ü™H[H\N‚‚ˆÚ[ˆ\œ˜Y›Ü›H[\Ü	Û[Ù[K˜[–ÌK˜[XÛİYØ[—ÛØYØ˜[[˜Ù\‹\ÉÈ[‹ZY‚ˆ‚•HÛÈRTÈ[™\İ[™\‹Ø˜XÚÙ[™™\Ûİ\˜Ù\ÈÚ[™H[Ù[Y[ˆH™]ÛÜšÚ[™Âš[YÜ˜][Ûˆ\ÙHY\ˆHšX[YÙ[™\˜]Y™\Ûİ\˜ÙHQÈ\™HÛ›İÛ‹‚
+# Alibaba Cloud Terraform Foundation
+
+This directory defines the cost-conscious Alibaba Cloud foundation for the
+Online Book Store demonstration. It is intentionally safe to validate without
+cloud credentials and does not run `terraform apply` in pull requests.
+
+## Managed resources
+
+- one VPC;
+- one vSwitch per supplied availability zone;
+- one security group with restricted SSH and K3s API access;
+- one pay-as-you-go ECS instance bootstrapped as a single-node K3s cluster;
+- one private, encrypted, versioned OSS bucket;
+- an optional internet-facing ALB, disabled by default.
+
+Five application environments are Kubernetes namespaces in this shared stack.
+They are not five copies of the Alibaba Cloud infrastructure.
+
+## Module layout
+
+```text
+terraform/
+â”œâ”€â”€ modules/
+â”‚   â”œâ”€â”€ alb/       # Optional ALB foundation
+â”‚   â”œâ”€â”€ compute/   # ECS, SSH key and pinned K3s bootstrap
+â”‚   â”œâ”€â”€ network/   # VPC, vSwitches and security rules
+â”‚   â””â”€â”€ storage/   # Private OSS bucket
+â”œâ”€â”€ tests/         # Mock-provider safety tests
+â””â”€â”€ *.tf           # Shared demonstration stack
+```
+
+## Cost controls
+
+- `enable_alb` defaults to `false`.
+- ECS uses `PostPaid`, `PayByTraffic`, a bounded egress rate and
+  `StopCharging` when stopped.
+- SSH and the K3s API reject `0.0.0.0/0` as the administrator CIDR.
+- ECS and OSS have `prevent_destroy` guards against accidental data loss.
+- ALB requires two availability zones and also has deletion protection.
+- No NAT Gateway, RDS, ACK, SLS or paid KMS instance is created.
+- Pull-request CI runs only formatting, initialization, validation and mocked
+  plans. It has no Alibaba Cloud credentials and cannot create resources.
+
+Free-trial limits are account entitlements, not Terraform guarantees. Confirm
+the ECS, OSS, ALB, EIP and traffic line items in the Alibaba Cloud console before
+every real apply.
+
+## Prepare values in the browser
+
+1. Use Alibaba Cloud Cloud Shell to generate an SSH key if required:
+
+   ```shell
+   ssh-keygen -t ed25519 -C bookstore-admin
+   ```
+
+2. Copy only the `.pub` value. Keep the private key out of GitHub and Terraform
+   state.
+3. In the ECS free-trial page, record the exact 2-vCPU/4-GiB instance type and
+   Ubuntu 22.04 x86_64 image ID available in `cn-hongkong`.
+4. Choose a globally unique OSS bucket name for the 20-GB local-redundancy
+   trial.
+5. Copy the example locally and replace every placeholder:
+
+   ```shell
+   cp terraform.tfvars.example terraform.tfvars
+   ```
+
+`terraform.tfvars` is ignored by Git and must never be committed.
+
+## Validate without creating resources
+
+```shell
+terraform fmt -recursive
+terraform init -backend=false
+terraform validate
+terraform test
+```
+
+Cloud deployment is intentionally separate from pull-request validation. See
+[Terraform Deployment from GitHub](../docs/terraform-deployment.md) for the OIDC
+identity, remote state, plan artifact, approval, and controlled apply workflow.
+
+## ALB trial import path
+
+The Alibaba Cloud ALB trial automatically creates an ALB and two EIPs, which
+means it cannot initially be created by this configuration. After the VPC and
+vSwitches exist:
+
+1. activate the ALB trial against those vSwitches;
+2. set `enable_alb = true`;
+3. import the trial ALB before any apply:
+
+   ```shell
+   terraform import 'module.alb[0].alicloud_alb_load_balancer.this' <alb-id>
+   ```
+
+The two EIPs and listener/backend resources will be modeled in the networking
+integration phase after the trial-generated resource IDs are known.

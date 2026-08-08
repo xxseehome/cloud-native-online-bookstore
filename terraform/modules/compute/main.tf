@@ -6,7 +6,7 @@ resource "alicloud_ecs_key_pair" "this" {
 
 resource "alicloud_instance" "k3s" {
   instance_name              = "${var.name_prefix}-k3s"
-  hostname                   = "${var.name_prefix}-k3s"
+  host_name                  = "${var.name_prefix}-k3s"
   image_id                   = var.image_id
   instance_type              = var.instance_type
   security_groups            = [var.security_group_id]

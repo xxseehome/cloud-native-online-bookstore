@@ -18,7 +18,7 @@ resource "alicloud_security_group" "k3s" {
   security_group_name = "${var.name_prefix}-k3s-sg"
   description         = "Least-privilege ingress for the Online Book Store K3s node"
   vpc_id              = alicloud_vpc.this.id
-  inner_access        = false
+  inner_access_policy = "Drop"
   tags                = var.tags
 }
 

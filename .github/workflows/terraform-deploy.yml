@@ -23,8 +23,6 @@ env:
   TF_STATE_BUCKET: ${{ vars.TF_STATE_BUCKET }}
   TF_STATE_KEY: ${{ vars.TF_STATE_KEY }}
   TF_STATE_REGION: ${{ vars.TF_STATE_REGION }}
-  TF_STATE_TABLESTORE_ENDPOINT: ${{ vars.TF_STATE_TABLESTORE_ENDPOINT }}
-  TF_STATE_TABLESTORE_TABLE: ${{ vars.TF_STATE_TABLESTORE_TABLE }}
   ALICLOUD_REGION: ${{ vars.ALICLOUD_REGION }}
   ALICLOUD_OIDC_PROVIDER_ARN: ${{ vars.ALICLOUD_OIDC_PROVIDER_ARN }}
   ALICLOUD_PLAN_ROLE_ARN: ${{ vars.ALICLOUD_PLAN_ROLE_ARN }}
@@ -64,8 +62,7 @@ jobs:
           missing=0
           for name in \
             TF_STATE_BUCKET TF_STATE_KEY TF_STATE_REGION \
-            TF_STATE_TABLESTORE_ENDPOINT \
-            TF_STATE_TABLESTORE_TABLE ALICLOUD_REGION \
+            ALICLOUD_REGION \
             ALICLOUD_OIDC_PROVIDER_ARN ALICLOUD_PLAN_ROLE_ARN \
             ALICLOUD_APPLY_ROLE_ARN \
             TF_VAR_availability_zones TF_VAR_vpc_cidr TF_VAR_vswitch_cidrs \
@@ -94,19 +91,17 @@ jobs:
           role-session-expiration: 1800
           audience: sts.aliyuncs.com
 
-      - name: Initialize encrypted remote state with locking
+      - name: Initialize encrypted remote state
         run: |
           terraform init \
             -backend-config="bucket=${TF_STATE_BUCKET}" \
             -backend-config="key=${TF_STATE_KEY}" \
             -backend-config="region=${TF_STATE_REGION}" \
             -backend-config="encrypt=true" \
-            -backend-config="acl=private" \
-            -backend-config="tablestore_endpoint=${TF_STATE_TABLESTORE_ENDPOINT}" \
-            -backend-config="tablestore_table=${TF_STATE_TABLESTORE_TABLE}"
+            -backend-config="acl=private"
 
       - name: Create execution plan
-        run: terraform plan -lock-timeout=5m -out=tfplan
+        run: terraform plan -out=tfplan
 
       - name: Add plan to the run summary
         run: |
@@ -157,16 +152,14 @@ jobs:
           role-session-expiration: 1800
           audience: sts.aliyuncs.com
 
-      - name: Initialize encrypted remote state with locking
+      - name: Initialize encrypted remote state
         run: |
           terraform init \
             -backend-config="bucket=${TF_STATE_BUCKET}" \
             -backend-config="key=${TF_STATE_KEY}" \
             -backend-config="region=${TF_STATE_REGION}" \
             -backend-config="encrypt=true" \
-            -backend-config="acl=private" \
-            -backend-config="tablestore_endpoint=${TF_STATE_TABLESTORE_ENDPOINT}" \
-            -backend-config="tablestore_table=${TF_STATE_TABLESTORE_TABLE}"
+            -backend-config="acl=private"
 
       - name: Download the approved plan
         uses: actions/download-artifact@v4
@@ -175,4 +168,4 @@ jobs:
           path: terraform
 
       - name: Apply the approved plan
-        run: terraform apply -lock-timeout=5m -auto-approve tfplan
+        run: terraform apply -auto-approve tfplan

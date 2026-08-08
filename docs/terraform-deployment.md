@@ -2,8 +2,8 @@
 
 The infrastructure pipeline runs entirely on GitHub-hosted runners. It uses
 short-lived Alibaba Cloud credentials obtained through GitHub OIDC, stores state
-in encrypted OSS, locks state with Tablestore, and pauses before `apply` at a
-protected GitHub Environment.
+in encrypted OSS, serializes Terraform runs through GitHub Actions, and pauses
+before `apply` at a protected GitHub Environment.
 
 No Alibaba Cloud AccessKey is stored in GitHub.
 
@@ -16,7 +16,7 @@ workflow_dispatch on main
 terraform-plan environment
         |
         +-- GitHub OIDC -> read-only RAM role
-        +-- remote OSS state + Tablestore lock
+        +-- remote OSS state
         +-- terraform plan
         +-- one-day immutable plan artifact
         |
@@ -36,12 +36,10 @@ approval or apply job.
 Create these once in the Alibaba Cloud console:
 
 1. a dedicated private OSS bucket for Terraform state;
-2. versioning and AES256 server-side encryption on the bucket;
-3. a Tablestore instance in the same region as the state bucket;
-4. a Tablestore table whose primary key is named `LockID` and has type `String`.
+2. versioning and AES256 server-side encryption on the bucket.
 
-Do not reuse the application asset bucket. Restrict the state bucket and lock
-table to the Terraform RAM roles and account administrators.
+Do not reuse the application asset bucket. Restrict the state bucket to the
+Terraform RAM roles and account administrators.
 
 ## 2. Configure GitHub as an Alibaba Cloud OIDC identity provider
 
@@ -53,8 +51,8 @@ In Alibaba Cloud RAM, create an OIDC identity provider with:
 
 Create two RAM roles that trust this provider:
 
-- a plan role with read-only resource access plus the OSS/Tablestore permissions
-  required to read and lock state;
+- a plan role with read-only resource access plus the OSS permissions required
+  to read state;
 - an apply role with only the VPC, ECS, OSS, ALB, RAM key-pair, and state access
   required by this repository.
 
@@ -101,8 +99,6 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 | `TF_STATE_BUCKET` | Dedicated state bucket name |
 | `TF_STATE_KEY` | `shared/terraform.tfstate` |
 | `TF_STATE_REGION` | State bucket region, for example `cn-shanghai` |
-| `TF_STATE_TABLESTORE_ENDPOINT` | HTTPS endpoint of the lock instance |
-| `TF_STATE_TABLESTORE_TABLE` | Lock table name |
 | `TF_AVAILABILITY_ZONES` | `["cn-hangzhou-i"]` for the adopted vSwitch |
 | `TF_VPC_CIDR` | `172.16.0.0/12` for the adopted default VPC |
 | `TF_VSWITCH_CIDRS` | `["172.20.128.0/20"]` for the adopted vSwitch |
@@ -120,8 +116,7 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 
 JSON list values must remain valid JSON, including the brackets and quotes.
 `TF_STATE_REGION` is independent from `ALICLOUD_REGION`; this allows the state
-bucket and lock table to remain in Shanghai while the demonstration stack runs
-in Hangzhou.
+bucket to remain in Shanghai while the demonstration stack runs in Hangzhou.
 
 For the current Hangzhou Workbench configuration, set
 `TF_SSH_INGRESS_CIDRS` to:
@@ -180,7 +175,9 @@ created earlier in the same workflow run.
 - GitHub serializes this shared infrastructure pipeline; runs are never canceled
   while an apply may be in progress.
 - OIDC credentials expire after 30 minutes.
-- Remote state is private, encrypted, versioned, and locked.
+- Remote state is private, encrypted, and versioned.
+- The OSS backend has no backend-level lock. Run Terraform only through these
+  workflows. Production environments should add Tablestore locking.
 - ALB remains disabled by default until its trial resources can be imported.
 - Resource adoption writes remote Terraform state but never changes Alibaba
   Cloud resources; the protected environment provides an explicit approval.

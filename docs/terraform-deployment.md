@@ -91,7 +91,7 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 
 | Variable | Example or meaning |
 | --- | --- |
-| `ALICLOUD_REGION` | `cn-hongkong` |
+| `ALICLOUD_REGION` | `cn-hangzhou` |
 | `ALICLOUD_OIDC_PROVIDER_ARN` | RAM OIDC provider ARN |
 | `ALICLOUD_PLAN_ROLE_ARN` | Read-only Terraform role ARN |
 | `ALICLOUD_APPLY_ROLE_ARN` | Terraform deployment role ARN |
@@ -100,7 +100,7 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 | `TF_STATE_REGION` | State bucket region, for example `cn-shanghai` |
 | `TF_STATE_TABLESTORE_ENDPOINT` | HTTPS endpoint of the lock instance |
 | `TF_STATE_TABLESTORE_TABLE` | Lock table name |
-| `TF_AVAILABILITY_ZONES` | `["cn-hongkong-b","cn-hongkong-c"]` |
+| `TF_AVAILABILITY_ZONES` | Example: `["cn-hangzhou-h","cn-hangzhou-i"]`; use zones available to the trial instance type |
 | `TF_VSWITCH_CIDRS` | `["10.20.1.0/24","10.20.2.0/24"]` |
 | `TF_ADMIN_CIDR` | Your current public IPv4 address with `/32` |
 | `TF_INSTANCE_TYPE` | Exact ECS free-trial instance type |
@@ -111,7 +111,7 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 JSON list values must remain valid JSON, including the brackets and quotes.
 `TF_STATE_REGION` is independent from `ALICLOUD_REGION`; this allows the state
 bucket and lock table to remain in Shanghai while the demonstration stack runs
-in Hong Kong.
+in Hangzhou.
 
 ## 5. Run from the GitHub website
 

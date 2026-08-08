@@ -55,8 +55,8 @@ every real apply.
 
 2. Copy only the `.pub` value. Keep the private key out of GitHub and Terraform
    state.
-3. In the ECS free-trial page, record the exact 2-vCPU/4-GiB instance type and
-   Ubuntu 22.04 x86_64 image ID available in `cn-hongkong`.
+3. In the ECS free-trial page, select `cn-hangzhou` and record the exact
+   2-vCPU/4-GiB instance type, available zones, and Ubuntu 22.04 x86_64 image ID.
 4. Choose a globally unique OSS bucket name for the 20-GB local-redundancy
    trial.
 5. Copy the example locally and replace every placeholder:

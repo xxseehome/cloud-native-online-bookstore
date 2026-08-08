@@ -1,7 +1,7 @@
 mock_provider "alicloud" {}
 
 variables {
-  availability_zones = ["cn-hongkong-b", "cn-hongkong-c"]
+  availability_zones = ["cn-hangzhou-h", "cn-hangzhou-i"]
   vswitch_cidrs      = ["10.20.1.0/24", "10.20.2.0/24"]
   admin_cidr         = "203.0.113.10/32"
   instance_type      = "ecs.test.large"
@@ -34,7 +34,7 @@ run "alb_rejects_one_zone" {
 
   variables {
     enable_alb         = true
-    availability_zones = ["cn-hongkong-b"]
+    availability_zones = ["cn-hangzhou-h"]
     vswitch_cidrs      = ["10.20.1.0/24"]
   }
 

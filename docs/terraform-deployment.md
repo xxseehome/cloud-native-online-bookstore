@@ -37,7 +37,7 @@ Create these once in the Alibaba Cloud console:
 
 1. a dedicated private OSS bucket for Terraform state;
 2. versioning and AES256 server-side encryption on the bucket;
-3. a Tablestore instance in the same region;
+3. a Tablestore instance in the same region as the state bucket;
 4. a Tablestore table whose primary key is named `LockID` and has type `String`.
 
 Do not reuse the application asset bucket. Restrict the state bucket and lock
@@ -97,6 +97,7 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 | `ALICLOUD_APPLY_ROLE_ARN` | Terraform deployment role ARN |
 | `TF_STATE_BUCKET` | Dedicated state bucket name |
 | `TF_STATE_KEY` | `shared/terraform.tfstate` |
+| `TF_STATE_REGION` | State bucket region, for example `cn-shanghai` |
 | `TF_STATE_TABLESTORE_ENDPOINT` | HTTPS endpoint of the lock instance |
 | `TF_STATE_TABLESTORE_TABLE` | Lock table name |
 | `TF_AVAILABILITY_ZONES` | `["cn-hongkong-b","cn-hongkong-c"]` |
@@ -108,6 +109,9 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 | `TF_ENABLE_ALB` | `false` until the ALB trial/import is ready |
 
 JSON list values must remain valid JSON, including the brackets and quotes.
+`TF_STATE_REGION` is independent from `ALICLOUD_REGION`; this allows the state
+bucket and lock table to remain in Shanghai while the demonstration stack runs
+in Hong Kong.
 
 ## 5. Run from the GitHub website
 

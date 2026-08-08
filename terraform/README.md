@@ -76,9 +76,9 @@ terraform validate
 terraform test
 ```
 
-Do not run `terraform apply` yet. The infrastructure deployment workflow,
-remote state, least-privilege RAM identity, plan artifact, environment approval
-and controlled apply are delivered in the next phase.
+Cloud deployment is intentionally separate from pull-request validation. See
+[Terraform Deployment from GitHub](../docs/terraform-deployment.md) for the OIDC
+identity, remote state, plan artifact, approval, and controlled apply workflow.
 
 ## ALB trial import path
 

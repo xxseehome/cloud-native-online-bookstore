@@ -36,6 +36,7 @@ constraints, and the staged deployment workflow.
 - GitHub Actions
 - Trunk-based development with short-lived feature branches
 - Immutable image promotion between environments
+- Terraform plan artifacts with protected-environment approval before apply
 
 ## Container
 

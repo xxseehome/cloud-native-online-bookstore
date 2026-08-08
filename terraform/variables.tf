@@ -1,7 +1,7 @@
 variable "region" {
   description = "Alibaba Cloud region used by the shared demonstration stack."
   type        = string
-  default     = "cn-hongkong"
+  default     = "cn-hangzhou"
 }
 
 variable "project_name" {

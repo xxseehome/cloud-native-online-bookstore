@@ -14,8 +14,12 @@ variable "vswitch_cidrs" {
   type = list(string)
 }
 
-variable "admin_cidr" {
-  type = string
+variable "ssh_ingress_cidrs" {
+  type = list(string)
+}
+
+variable "k3s_api_ingress_cidrs" {
+  type = list(string)
 }
 
 variable "web_ingress_cidr" {

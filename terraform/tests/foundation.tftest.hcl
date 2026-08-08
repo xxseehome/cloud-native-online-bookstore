@@ -3,7 +3,7 @@ mock_provider "alicloud" {}
 variables {
   availability_zones = ["cn-hangzhou-h", "cn-hangzhou-i"]
   vswitch_cidrs      = ["10.20.1.0/24", "10.20.2.0/24"]
-  admin_cidr         = "203.0.113.10/32"
+  ssh_ingress_cidrs  = ["203.0.113.10/32"]
   instance_type      = "ecs.test.large"
   image_id           = "ubuntu-test-image"
   ssh_public_key     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAITestOnlyPublicKey bookstore-test"
@@ -39,4 +39,14 @@ run "alb_rejects_one_zone" {
   }
 
   expect_failures = [check.alb_requires_two_zones]
+}
+
+run "ssh_rejects_public_cidr" {
+  command = plan
+
+  variables {
+    ssh_ingress_cidrs = ["0.0.0.0/0"]
+  }
+
+  expect_failures = [var.ssh_ingress_cidrs]
 }

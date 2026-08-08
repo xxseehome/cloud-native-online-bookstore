@@ -34,7 +34,8 @@ terraform/
 - `enable_alb` defaults to `false`.
 - ECS uses `PostPaid`, `PayByTraffic`, a bounded egress rate and
   `StopCharging` when stopped.
-- SSH and the K3s API reject `0.0.0.0/0` as the administrator CIDR.
+- SSH and the optional K3s API reject `0.0.0.0/0` for every allowed CIDR.
+- The K3s API has no public ingress by default; kubectl runs on the node.
 - ECS and OSS have `prevent_destroy` guards against accidental data loss.
 - ALB requires two availability zones and also has deletion protection.
 - No NAT Gateway, RDS, ACK, SLS or paid KMS instance is created.
@@ -55,8 +56,9 @@ every real apply.
 
 2. Copy only the `.pub` value. Keep the private key out of GitHub and Terraform
    state.
-3. In the ECS free-trial page, select `cn-hangzhou` and record the exact
-   2-vCPU/4-GiB instance type, available zones, and Ubuntu 22.04 x86_64 image ID.
+3. The adopted free-trial instance uses `ecs.e-c1m2.large` in
+   `cn-hangzhou-i` with image
+   `ubuntu_22_04_x64_20G_alibase_20260723.vhd`.
 4. Choose a globally unique OSS bucket name for the 20-GB local-redundancy
    trial.
 5. Copy the example locally and replace every placeholder:
@@ -79,6 +81,8 @@ terraform test
 Cloud deployment is intentionally separate from pull-request validation. See
 [Terraform Deployment from GitHub](../docs/terraform-deployment.md) for the OIDC
 identity, remote state, plan artifact, approval, and controlled apply workflow.
+The same guide contains the one-time, state-only adoption workflow required for
+the console-created free-trial VPC, vSwitch, security group, and ECS instance.
 
 ## ALB trial import path
 

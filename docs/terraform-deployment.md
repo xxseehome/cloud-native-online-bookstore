@@ -82,6 +82,9 @@ In **Settings -> Environments**, create:
 - allow deployments only from `main`;
 - add a required reviewer;
 - keep self-review disabled when a second reviewer is available.
+- store the same `TF_SSH_PUBLIC_KEY` environment secret used by
+  `terraform-plan`; the state-adoption workflow evaluates the full
+  configuration but never writes the private key to state.
 
 The apply job cannot start until this environment approves it.
 
@@ -100,26 +103,72 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 | `TF_STATE_REGION` | State bucket region, for example `cn-shanghai` |
 | `TF_STATE_TABLESTORE_ENDPOINT` | HTTPS endpoint of the lock instance |
 | `TF_STATE_TABLESTORE_TABLE` | Lock table name |
-| `TF_AVAILABILITY_ZONES` | Example: `["cn-hangzhou-h","cn-hangzhou-i"]`; use zones available to the trial instance type |
-| `TF_VSWITCH_CIDRS` | `["10.20.1.0/24","10.20.2.0/24"]` |
-| `TF_ADMIN_CIDR` | Your current public IPv4 address with `/32` |
+| `TF_AVAILABILITY_ZONES` | `["cn-hangzhou-i"]` for the adopted vSwitch |
+| `TF_VPC_CIDR` | `172.16.0.0/12` for the adopted default VPC |
+| `TF_VSWITCH_CIDRS` | `["172.20.128.0/20"]` for the adopted vSwitch |
+| `TF_SSH_INGRESS_CIDRS` | JSON list of current Alibaba Cloud Workbench CIDRs; never include `0.0.0.0/0` |
+| `TF_K3S_API_INGRESS_CIDRS` | `[]` when kubectl runs on the node |
 | `TF_INSTANCE_TYPE` | Exact ECS free-trial instance type |
 | `TF_IMAGE_ID` | Exact Ubuntu image ID in the selected region |
+| `TF_INTERNET_MAX_BANDWIDTH_OUT` | `100` to preserve the trial instance configuration; traffic limits still apply |
 | `TF_OSS_BUCKET_NAME` | Globally unique application bucket name |
 | `TF_ENABLE_ALB` | `false` until the ALB trial/import is ready |
+| `TF_EXISTING_VPC_ID` | `vpc-bp15izs541lrz2xnc2b7j` |
+| `TF_EXISTING_VSWITCH_ID` | `vsw-bp1d2g0o04pfsnxdp0y3a` |
+| `TF_EXISTING_SECURITY_GROUP_ID` | `sg-bp1e67jdt4t6c9y90298` |
+| `TF_EXISTING_INSTANCE_ID` | `i-bp1e67jdt4t6c9y8kbgt` |
 
 JSON list values must remain valid JSON, including the brackets and quotes.
 `TF_STATE_REGION` is independent from `ALICLOUD_REGION`; this allows the state
 bucket and lock table to remain in Shanghai while the demonstration stack runs
 in Hangzhou.
 
-## 5. Run from the GitHub website
+For the current Hangzhou Workbench configuration, set
+`TF_SSH_INGRESS_CIDRS` to:
+
+```json
+["47.96.60.0/24","118.31.243.0/24","8.139.112.0/24","8.139.99.192/26"]
+```
+
+Reconfirm these service ranges in Alibaba Cloud documentation before reusing
+the configuration in another account or region.
+
+## 5. Adopt the console-created free-trial resources once
+
+The ECS free-trial flow created the VPC, vSwitch, security group, and instance
+before Terraform state existed. Do not run a normal apply until these resources
+are adopted.
+
+1. Open **Actions -> Terraform Adopt Existing Resources -> Run workflow**.
+2. Select `main` and enter `i-bp1e67jdt4t6c9y8kbgt` as the confirmation.
+3. Approve the protected `terraform-apply` environment deployment.
+4. Confirm the summary lists these four addresses:
+
+   ```text
+   module.network.alicloud_vpc.this
+   module.network.alicloud_vswitch.this[0]
+   module.network.alicloud_security_group.k3s
+   module.compute.alicloud_instance.k3s
+   ```
+
+The workflow is idempotent, rejects an existing state address that points to a
+different resource ID, and never runs `terraform apply`. OSS application
+storage, Terraform-managed security-group rules, and the SSH key pair remain
+unmanaged until a later reviewed plan is applied.
+
+## 6. Run from the GitHub website
 
 1. Open **Actions -> Terraform Deploy -> Run workflow**.
 2. Select `main` and leave **Apply** unchecked.
 3. Review the plan in the run summary.
 4. After the plan is cost-safe, run the workflow again with **Apply** checked.
 5. Review and approve the `terraform-apply` environment deployment.
+
+For the first plan after adoption, expect differences in names, tags, security
+rules, the SSH key pair, and K3s bootstrap configuration. Do not apply until the
+plan contains no ECS replacement or deletion. After the restricted Workbench
+SSH rules are applied and tested, remove the original manual SSH rule that
+allows `0.0.0.0/0`.
 
 The plan artifact expires after one day and the apply job consumes the exact plan
 created earlier in the same workflow run.
@@ -133,3 +182,5 @@ created earlier in the same workflow run.
 - OIDC credentials expire after 30 minutes.
 - Remote state is private, encrypted, versioned, and locked.
 - ALB remains disabled by default until its trial resources can be imported.
+- Resource adoption writes remote Terraform state but never changes Alibaba
+  Cloud resources; the protected environment provides an explicit approval.

@@ -23,6 +23,8 @@ resource "alicloud_security_group" "k3s" {
 }
 
 resource "alicloud_security_group_rule" "ssh" {
+  for_each = toset(var.ssh_ingress_cidrs)
+
   type              = "ingress"
   ip_protocol       = "tcp"
   nic_type          = "intranet"
@@ -30,10 +32,12 @@ resource "alicloud_security_group_rule" "ssh" {
   port_range        = "22/22"
   priority          = 1
   security_group_id = alicloud_security_group.k3s.id
-  cidr_ip           = var.admin_cidr
+  cidr_ip           = each.value
 }
 
 resource "alicloud_security_group_rule" "k3s_api" {
+  for_each = toset(var.k3s_api_ingress_cidrs)
+
   type              = "ingress"
   ip_protocol       = "tcp"
   nic_type          = "intranet"
@@ -41,7 +45,7 @@ resource "alicloud_security_group_rule" "k3s_api" {
   port_range        = "6443/6443"
   priority          = 1
   security_group_id = alicloud_security_group.k3s.id
-  cidr_ip           = var.admin_cidr
+  cidr_ip           = each.value
 }
 
 resource "alicloud_security_group_rule" "http" {

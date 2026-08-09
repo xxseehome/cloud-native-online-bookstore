@@ -101,7 +101,7 @@ jobs:
 
           manifest_base64="$(base64 --wrap=0 rendered.yaml)"
           deploy_script="$(printf '%s\n' \
-            'set -euo pipefail' \
+            'set -eu' \
             "printf '%s' '${manifest_base64}' | base64 --decode > /tmp/bookstore.yaml" \
             'k3s kubectl apply -f /tmp/bookstore.yaml' \
             'namespace=$(awk '\''$1 == "namespace:" { print $2; exit }'\'' /tmp/bookstore.yaml)' \
@@ -134,6 +134,7 @@ jobs:
                 exit 0
                 ;;
               Failed|Stopped|Timeout|Error|Cancelled|Terminated|Invalid|Aborted)
+                jq -r '.Invocation.InvocationResults.InvocationResult[0].Output // empty' <<< "$result" | base64 --decode || true
                 jq -r '.Invocation.InvocationResults.InvocationResult[0]' <<< "$result"
                 exit 1
                 ;;

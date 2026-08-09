@@ -1,0 +1,135 @@
+name: Kubernetes Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy
+        required: true
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      image_tag:
+        description: Immutable image tag produced by the main CI workflow
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: kubernetes-${{ inputs.environment }}
+  cancel-in-progress: false
+
+env:
+  ALICLOUD_REGION: ${{ vars.ALICLOUD_REGION }}
+  ALICLOUD_OIDC_PROVIDER_ARN: ${{ vars.ALICLOUD_OIDC_PROVIDER_ARN }}
+  ALICLOUD_APPLY_ROLE_ARN: ${{ vars.ALICLOUD_APPLY_ROLE_ARN }}
+  ECS_INSTANCE_ID: ${{ vars.TF_EXISTING_INSTANCE_ID }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v5
+
+      - name: Restrict deployments to main
+        run: test "$GITHUB_REF" = "refs/heads/main"
+
+      - name: Validate inputs and configuration
+        shell: bash
+        env:
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          set -euo pipefail
+          [[ "$IMAGE_TAG" =~ ^[0-9a-f]{40}$ ]] || {
+            echo "::error::image_tag must be a full 40-character Git commit SHA."
+            exit 1
+          }
+          for name in ALICLOUD_REGION ALICLOUD_OIDC_PROVIDER_ARN ALICLOUD_APPLY_ROLE_ARN ECS_INSTANCE_ID; do
+            [[ -n "${!name}" ]] || {
+              echo "::error::Missing GitHub variable: ${name}"
+              exit 1
+            }
+          done
+
+      - name: Render and validate manifests
+        env:
+          DEPLOY_ENVIRONMENT: ${{ inputs.environment }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          kubectl kustomize "kubernetes/overlays/${DEPLOY_ENVIRONMENT}" > rendered.yaml
+          sed -i "s/IMAGE_TAG/${IMAGE_TAG}/g" rendered.yaml
+          ! grep -q IMAGE_TAG rendered.yaml
+
+      - name: Authenticate to Alibaba Cloud with OIDC
+        uses: aliyun/configure-aliyun-credentials-action@1e5248c8d5d93a8781ac344a68e19a43341e79e6
+        with:
+          oidc-provider-arn: ${{ env.ALICLOUD_OIDC_PROVIDER_ARN }}
+          role-to-assume: ${{ env.ALICLOUD_APPLY_ROLE_ARN }}
+          role-session-name: github-kubernetes-deploy
+          role-session-expiration: 1800
+          audience: sts.aliyuncs.com
+
+      - name: Install Alibaba Cloud CLI
+        run: |
+          curl --fail --location --silent --show-error \
+            https://github.com/aliyun/aliyun-cli/releases/download/v3.3.18/aliyun-cli-linux-3.3.18-amd64.tgz \
+            --output aliyun-cli.tgz
+          tar --extract --gzip --file aliyun-cli.tgz
+          sudo install aliyun /usr/local/bin/aliyun
+          aliyun version
+
+      - name: Deploy through ECS Cloud Assistant
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          manifest_base64="$(base64 --wrap=0 rendered.yaml)"
+          deploy_script="$(printf '%s\n' \
+            'set -euo pipefail' \
+            "printf '%s' '${manifest_base64}' | base64 --decode > /tmp/bookstore.yaml" \
+            'k3s kubectl apply -f /tmp/bookstore.yaml' \
+            'namespace=$(awk '\''$1 == "namespace:" { print $2; exit }'\'' /tmp/bookstore.yaml)' \
+            'k3s kubectl rollout status deployment/bookstore-backend -n "$namespace" --timeout=300s' \
+            'k3s kubectl rollout status deployment/bookstore-frontend -n "$namespace" --timeout=300s' \
+            'k3s kubectl get deployment,service,ingress -n "$namespace"')"
+          command_base64="$(printf '%s' "$deploy_script" | base64 --wrap=0)"
+
+          response="$(aliyun ecs RunCommand \
+            --RegionId "$ALICLOUD_REGION" \
+            --InstanceId.1 "$ECS_INSTANCE_ID" \
+            --Type RunShellScript \
+            --CommandContent "$command_base64" \
+            --ContentEncoding Base64 \
+            --Timeout 600 \
+            --KeepCommand false)"
+          invoke_id="$(jq -r '.InvokeId' <<< "$response")"
+          [[ -n "$invoke_id" && "$invoke_id" != null ]]
+          echo "Cloud Assistant invocation: ${invoke_id}"
+
+          for attempt in {1..60}; do
+            result="$(aliyun ecs DescribeInvocationResults \
+              --RegionId "$ALICLOUD_REGION" \
+              --InvokeId "$invoke_id" \
+              --InstanceId "$ECS_INSTANCE_ID")"
+            status="$(jq -r '.Invocation.InvocationResults.InvocationResult[0].InvocationStatus // empty' <<< "$result")"
+            case "$status" in
+              Success)
+                jq -r '.Invocation.InvocationResults.InvocationResult[0].Output // empty' <<< "$result" | base64 --decode
+                exit 0
+                ;;
+              Failed|Stopped|Timeout|Error|Cancelled|Terminated|Invalid|Aborted)
+                jq -r '.Invocation.InvocationResults.InvocationResult[0]' <<< "$result"
+                exit 1
+                ;;
+            esac
+            sleep 5
+          done
+          echo "::error::Timed out waiting for Cloud Assistant."
+          exit 1

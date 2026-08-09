@@ -12,6 +12,23 @@ permissions:
   contents: read
 
 jobs:
+  kubernetes-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v5
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.33.6
+      - name: Render all environment overlays
+        run: |
+          for environment in development staging production; do
+            kubectl kustomize "kubernetes/overlays/${environment}" > "/tmp/${environment}.yaml"
+            grep -q 'kind: Deployment' "/tmp/${environment}.yaml"
+            grep -q 'kind: Ingress' "/tmp/${environment}.yaml"
+          done
+
   backend-test:
     runs-on: ubuntu-latest
     steps:

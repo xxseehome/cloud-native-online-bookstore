@@ -9,6 +9,5 @@ patches:
       kind: Ingress
       name: bookstore
     patch: |-
-      - op: replace
+      - op: remove
         path: /spec/rules/0/host
-        value: dev.bookstore.example.com

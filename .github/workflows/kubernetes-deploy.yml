@@ -108,6 +108,10 @@ jobs:
             'for pod in $(k3s kubectl get pods -n "$namespace" -o custom-columns=NAME:.metadata.name,IMAGE:.spec.containers[0].image --no-headers | awk '\''$2 ~ /^ghcr[.]io\// { print $1 }'\''); do k3s kubectl delete pod "$pod" -n "$namespace" --force --grace-period=0 --ignore-not-found; done' \
             'k3s kubectl rollout status deployment/bookstore-backend -n "$namespace" --timeout=300s || { k3s kubectl get pods -n "$namespace" -o wide; k3s kubectl get events -n "$namespace" --sort-by=.lastTimestamp; exit 1; }' \
             'k3s kubectl rollout status deployment/bookstore-frontend -n "$namespace" --timeout=300s || { k3s kubectl get pods -n "$namespace" -o wide; k3s kubectl get events -n "$namespace" --sort-by=.lastTimestamp; exit 1; }' \
+            'curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused http://127.0.0.1/ >/dev/null' \
+            'curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused http://127.0.0.1/health' \
+            'curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused http://127.0.0.1/api/books >/dev/null' \
+            'echo "HTTP smoke tests passed."' \
             'k3s kubectl get deployment,service,ingress -n "$namespace"')"
           command_base64="$(printf '%s' "$deploy_script" | base64 --wrap=0)"
 

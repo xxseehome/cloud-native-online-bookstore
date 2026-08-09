@@ -26,22 +26,15 @@ concurrency:
 
 env:
   ALICLOUD_REGION: ${{ vars.ALICLOUD_REGION }}
+  ALIBABA_CLOUD_REGION_ID: ${{ vars.ALICLOUD_REGION }}
   ALICLOUD_OIDC_PROVIDER_ARN: ${{ vars.ALICLOUD_OIDC_PROVIDER_ARN }}
   ALICLOUD_APPLY_ROLE_ARN: ${{ vars.ALICLOUD_APPLY_ROLE_ARN }}
   ECS_INSTANCE_ID: ${{ vars.TF_EXISTING_INSTANCE_ID }}
 
 jobs:
-  approval:
+  deploy:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
-    steps:
-      - name: Approve target environment
-        run: echo "Deployment to ${{ inputs.environment }} approved."
-
-  deploy:
-    needs: approval
-    runs-on: ubuntu-latest
-    environment: terraform-apply
     steps:
       - name: Checkout source code
         uses: actions/checkout@v5

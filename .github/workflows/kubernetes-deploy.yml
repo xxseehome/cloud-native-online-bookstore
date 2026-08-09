@@ -114,12 +114,60 @@ jobs:
         run: |
           set -euo pipefail
 
-          manifest_base64="$(base64 --wrap=0 rendered.yaml)"
-          monitoring_base64="$(base64 --wrap=0 monitoring-rendered.yaml)"
+          run_cloud_command() {
+            local script="$1"
+            local timeout="${2:-120}"
+            local command_base64 response invoke_id result status
+
+            command_base64="$(printf '%s' "$script" | base64 --wrap=0)"
+            response="$(aliyun ecs RunCommand \
+              --RegionId "$ALICLOUD_REGION" \
+              --InstanceId.1 "$ECS_INSTANCE_ID" \
+              --Type RunShellScript \
+              --CommandContent "$command_base64" \
+              --ContentEncoding Base64 \
+              --Timeout "$timeout" \
+              --KeepCommand false)"
+            invoke_id="$(jq -r '.InvokeId' <<< "$response")"
+            [[ -n "$invoke_id" && "$invoke_id" != null ]]
+            echo "Cloud Assistant invocation: ${invoke_id}"
+
+            for attempt in {1..240}; do
+              result="$(aliyun ecs DescribeInvocationResults \
+                --RegionId "$ALICLOUD_REGION" \
+                --InvokeId "$invoke_id" \
+                --InstanceId "$ECS_INSTANCE_ID")"
+              status="$(jq -r '.Invocation.InvocationResults.InvocationResult[0].InvocationStatus // empty' <<< "$result")"
+              case "$status" in
+                Success)
+                  jq -r '.Invocation.InvocationResults.InvocationResult[0].Output // empty' <<< "$result" | base64 --decode
+                  return 0
+                  ;;
+                Failed|Stopped|Timeout|Error|Cancelled|Terminated|Invalid|Aborted)
+                  jq -r '.Invocation.InvocationResults.InvocationResult[0].Output // empty' <<< "$result" | base64 --decode || true
+                  jq -r '.Invocation.InvocationResults.InvocationResult[0]' <<< "$result"
+                  return 1
+                  ;;
+              esac
+              sleep 5
+            done
+            echo "::error::Timed out waiting for Cloud Assistant."
+            return 1
+          }
+
+          tar --create --gzip --file deploy-manifests.tgz rendered.yaml monitoring-rendered.yaml
+          payload_base64="$(base64 --wrap=0 deploy-manifests.tgz)"
+          run_cloud_command 'rm -f /tmp/deploy-manifests.tgz.b64'
+          while IFS= read -r chunk; do
+            run_cloud_command "printf '%s' '${chunk}' >> /tmp/deploy-manifests.tgz.b64"
+          done < <(fold --width=48000 <<< "$payload_base64")
+
           deploy_script="$(printf '%s\n' \
             'set -eu' \
-            "printf '%s' '${manifest_base64}' | base64 --decode > /tmp/bookstore.yaml" \
-            "printf '%s' '${monitoring_base64}' | base64 --decode > /tmp/monitoring.yaml" \
+            'base64 --decode /tmp/deploy-manifests.tgz.b64 > /tmp/deploy-manifests.tgz' \
+            'tar --extract --gzip --file /tmp/deploy-manifests.tgz --directory /tmp' \
+            'mv /tmp/rendered.yaml /tmp/bookstore.yaml' \
+            'mv /tmp/monitoring-rendered.yaml /tmp/monitoring.yaml' \
             'k3s kubectl apply -f /tmp/bookstore.yaml' \
             'k3s kubectl create namespace monitoring --dry-run=client -o yaml | k3s kubectl apply -f -' \
             'k3s kubectl apply --server-side -f /tmp/monitoring.yaml' \
@@ -141,38 +189,4 @@ jobs:
             'echo "Monitoring smoke test passed."' \
             'k3s kubectl get pods,service,ingress -n monitoring' \
             'k3s kubectl get deployment,service,ingress -n "$namespace"')"
-          command_base64="$(printf '%s' "$deploy_script" | base64 --wrap=0)"
-
-          response="$(aliyun ecs RunCommand \
-            --RegionId "$ALICLOUD_REGION" \
-            --InstanceId.1 "$ECS_INSTANCE_ID" \
-            --Type RunShellScript \
-            --CommandContent "$command_base64" \
-            --ContentEncoding Base64 \
-            --Timeout 600 \
-            --KeepCommand false)"
-          invoke_id="$(jq -r '.InvokeId' <<< "$response")"
-          [[ -n "$invoke_id" && "$invoke_id" != null ]]
-          echo "Cloud Assistant invocation: ${invoke_id}"
-
-          for attempt in {1..60}; do
-            result="$(aliyun ecs DescribeInvocationResults \
-              --RegionId "$ALICLOUD_REGION" \
-              --InvokeId "$invoke_id" \
-              --InstanceId "$ECS_INSTANCE_ID")"
-            status="$(jq -r '.Invocation.InvocationResults.InvocationResult[0].InvocationStatus // empty' <<< "$result")"
-            case "$status" in
-              Success)
-                jq -r '.Invocation.InvocationResults.InvocationResult[0].Output // empty' <<< "$result" | base64 --decode
-                exit 0
-                ;;
-              Failed|Stopped|Timeout|Error|Cancelled|Terminated|Invalid|Aborted)
-                jq -r '.Invocation.InvocationResults.InvocationResult[0].Output // empty' <<< "$result" | base64 --decode || true
-                jq -r '.Invocation.InvocationResults.InvocationResult[0]' <<< "$result"
-                exit 1
-                ;;
-            esac
-            sleep 5
-          done
-          echo "::error::Timed out waiting for Cloud Assistant."
-          exit 1
+          run_cloud_command "$deploy_script" 1200

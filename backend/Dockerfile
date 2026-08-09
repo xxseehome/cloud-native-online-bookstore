@@ -5,12 +5,12 @@ WORKDIR /app
 COPY requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r requirements.txt \
-    && groupadd --system app \
-    && useradd --system --gid app --home-dir /app app
+    && groupadd --system --gid 10001 app \
+    && useradd --system --uid 10001 --gid 10001 --home-dir /app app
 
 COPY --chown=app:app main.py .
 
-USER app
+USER 10001:10001
 
 EXPOSE 8000
 

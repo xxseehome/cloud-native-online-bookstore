@@ -17,8 +17,9 @@ write_files:
       node-label:
         - "platform=online-bookstore"
         - "environment=shared"
+      system-default-registry: registry.cn-hangzhou.aliyuncs.com
 
 runcmd:
   - [sysctl, --system]
-  - [sh, -c, "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION='${k3s_version}' INSTALL_K3S_EXEC='server' sh -"]
+  - [sh, -c, "curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_VERSION='${k3s_version}' INSTALL_K3S_EXEC='server' sh -"]
   - [sh, -c, "systemctl is-active --quiet k3s"]

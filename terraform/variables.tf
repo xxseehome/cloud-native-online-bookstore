@@ -122,9 +122,9 @@ variable "system_disk_category" {
 }
 
 variable "k3s_version" {
-  description = "Pinned K3s release installed by cloud-init."
+  description = "Pinned K3s release available from the Rancher China mirror and Alibaba Cloud system image registry."
   type        = string
-  default     = "v1.36.1+k3s1"
+  default     = "v1.33.6+k3s1"
 }
 
 variable "oss_bucket_name" {

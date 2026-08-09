@@ -15,14 +15,6 @@ grafana:
     limits:
       cpu: 300m
       memory: 256Mi
-  grafana.ini:
-    server:
-      root_url: "%(protocol)s://%(domain)s/grafana/"
-      serve_from_sub_path: true
-    auth.anonymous:
-      enabled: true
-      org_role: Viewer
-
 prometheus:
   prometheusSpec:
     retention: 24h
@@ -75,4 +67,3 @@ kubeScheduler:
   enabled: false
 kubeProxy:
   enabled: false
-

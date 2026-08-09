@@ -2,20 +2,17 @@
 
 ## Purpose
 
-The platform must provide five logical environments without maintaining
-environment-specific Git branches or duplicating the complete infrastructure
-stack. The environments are therefore organized into three promotion stages and
-isolated with Kubernetes namespaces in a shared K3s cluster.
+The platform provides three environments without maintaining environment-specific
+Git branches or duplicating the complete infrastructure stack. They are isolated
+with Kubernetes namespaces in a shared K3s cluster.
 
 ## Promotion Stages
 
-| Promotion stage | Logical environment | Kubernetes namespace | Purpose |
-| --- | --- | --- | --- |
-| Non-production | Development | `bookstore-dev` | Developer integration and rapid feedback |
-| Non-production | Test | `bookstore-test` | Internal QA and automated end-to-end testing |
-| Pre-production | Performance | `bookstore-perf` | Performance and capacity checks |
-| Pre-production | Staging | `bookstore-staging` | Integration testing and UAT |
-| Production | Production | `bookstore-production` | Production workload |
+| Environment | Kubernetes namespace | Purpose |
+| --- | --- | --- |
+| Development | `bookstore-dev` | Developer integration and automated testing |
+| Staging | `bookstore-staging` | Integration testing and UAT |
+| Production | `bookstore-production` | Production workload |
 
 ## Branching Model
 
@@ -31,16 +28,14 @@ The repository uses trunk-based development:
 
 The service pipeline builds the frontend and backend images once. Images are
 tagged with the Git commit SHA and the same image digest is promoted through all
-five logical environments.
+three environments.
 
 ```mermaid
 flowchart LR
     PR[Pull request] --> CI[Unit and security checks]
     CI --> Build[Build image once]
     Build --> Dev[Development]
-    Dev --> Test[Test]
-    Test --> Perf[Performance]
-    Perf --> Staging[Staging approval]
+    Dev --> Staging[Staging approval]
     Staging --> Production[Production approval]
 ```
 
@@ -49,8 +44,7 @@ tested artifact different from the production artifact.
 
 ## Deployment Rules
 
-- Development and test deployments are automatic after their required checks pass.
-- Performance deployment uses the same immutable image promoted from test.
+- Development deployment is automatic after its required checks pass.
 - Staging requires a GitHub Environment approval.
 - Production requires a separate GitHub Environment approval.
 - Open Policy Agent policies verify that staging and production are configured
@@ -67,7 +61,7 @@ but must not duplicate the complete base manifests.
 
 ## Infrastructure Scope
 
-The five environments share one Alibaba Cloud infrastructure stack for this
+The three environments share one Alibaba Cloud infrastructure stack for this
 demonstration:
 
 - one VPC and vSwitch;

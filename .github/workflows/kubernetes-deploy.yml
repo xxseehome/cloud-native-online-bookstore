@@ -84,11 +84,12 @@ jobs:
             --output helm.tgz
           tar --extract --gzip --file helm.tgz
           sudo install linux-amd64/helm /usr/local/bin/helm
+          helm show crds oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack \
+            --version "$MONITORING_CHART_VERSION" > monitoring-crds.yaml
           helm template monitoring oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack \
             --version "$MONITORING_CHART_VERSION" \
             --namespace monitoring \
             --create-namespace \
-            --include-crds \
             --values monitoring/values.yaml > monitoring-rendered.yaml
 
       - name: Authenticate to Alibaba Cloud with OIDC
@@ -155,7 +156,8 @@ jobs:
             return 1
           }
 
-          tar --create --gzip --file deploy-manifests.tgz rendered.yaml monitoring-rendered.yaml
+          tar --create --gzip --file deploy-manifests.tgz \
+            rendered.yaml monitoring-crds.yaml monitoring-rendered.yaml
           payload_base64="$(base64 --wrap=0 deploy-manifests.tgz)"
           run_cloud_command 'rm -f /tmp/deploy-manifests.tgz.b64'
           while IFS= read -r chunk; do
@@ -170,6 +172,8 @@ jobs:
             'mv /tmp/monitoring-rendered.yaml /tmp/monitoring.yaml' \
             'k3s kubectl apply -f /tmp/bookstore.yaml' \
             'k3s kubectl create namespace monitoring --dry-run=client -o yaml | k3s kubectl apply -f -' \
+            'k3s kubectl apply --server-side -f /tmp/monitoring-crds.yaml' \
+            'k3s kubectl wait --for=condition=Established --timeout=180s -f /tmp/monitoring-crds.yaml' \
             'k3s kubectl apply --server-side -f /tmp/monitoring.yaml' \
             'namespace=$(awk '\''$1 == "namespace:" { print $2; exit }'\'' /tmp/bookstore.yaml)' \
             'for pod in $(k3s kubectl get pods -n "$namespace" -o custom-columns=NAME:.metadata.name,IMAGE:.spec.containers[0].image --no-headers | awk '\''$2 ~ /^ghcr[.]io\// { print $1 }'\''); do k3s kubectl delete pod "$pod" -n "$namespace" --force --grace-period=0 --ignore-not-found; done' \

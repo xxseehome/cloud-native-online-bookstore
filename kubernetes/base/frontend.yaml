@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/xxseehome/cloud-native-online-bookstore-frontend:IMAGE_TAG
+          image: crpi-guf725ppv0myjkdj-vpc.cn-hangzhou.personal.cr.aliyuncs.com/online-bookstore/bookstore-frontend:IMAGE_TAG
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

@@ -51,17 +51,11 @@ constraints, and the staged deployment workflow.
 
 ## Environments and Promotion
 
-The platform provides five logical application environments organized into three
-promotion stages:
+The platform provides three application environments:
 
-1. **Non-production**
-   - Development
-   - Test
-2. **Pre-production**
-   - Performance
-   - Staging
+1. **Development**
+2. **Staging**
 3. **Production**
-   - Production
 
 The environments share a K3s cluster and are isolated with Kubernetes namespaces.
 A container image is built once and promoted between environments using the same

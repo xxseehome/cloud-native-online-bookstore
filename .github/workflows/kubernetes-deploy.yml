@@ -160,7 +160,7 @@ jobs:
           run_cloud_command 'rm -f /tmp/deploy-manifests.tgz.b64'
           while IFS= read -r chunk; do
             run_cloud_command "printf '%s' '${chunk}' >> /tmp/deploy-manifests.tgz.b64"
-          done < <(fold --width=48000 <<< "$payload_base64")
+          done < <(fold --width=6000 <<< "$payload_base64")
 
           deploy_script="$(printf '%s\n' \
             'set -eu' \

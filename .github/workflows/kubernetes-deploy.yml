@@ -25,6 +25,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
+  MONITORING_CHART_VERSION: "86.0.0"
   ALICLOUD_REGION: ${{ vars.ALICLOUD_REGION }}
   ALIBABA_CLOUD_REGION_ID: ${{ vars.ALICLOUD_REGION }}
   ALICLOUD_OIDC_PROVIDER_ARN: ${{ vars.ALICLOUD_OIDC_PROVIDER_ARN }}
@@ -76,6 +77,20 @@ jobs:
           sed -i "s/IMAGE_TAG/${IMAGE_TAG}/g" rendered.yaml
           ! grep -q IMAGE_TAG rendered.yaml
 
+      - name: Render monitoring stack
+        run: |
+          curl --fail --location --silent --show-error \
+            https://get.helm.sh/helm-v3.18.6-linux-amd64.tar.gz \
+            --output helm.tgz
+          tar --extract --gzip --file helm.tgz
+          sudo install linux-amd64/helm /usr/local/bin/helm
+          helm template monitoring oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack \
+            --version "$MONITORING_CHART_VERSION" \
+            --namespace monitoring \
+            --create-namespace \
+            --include-crds \
+            --values monitoring/values.yaml > monitoring-rendered.yaml
+
       - name: Authenticate to Alibaba Cloud with OIDC
         uses: aliyun/configure-aliyun-credentials-action@1e5248c8d5d93a8781ac344a68e19a43341e79e6
         with:
@@ -100,10 +115,14 @@ jobs:
           set -euo pipefail
 
           manifest_base64="$(base64 --wrap=0 rendered.yaml)"
+          monitoring_base64="$(base64 --wrap=0 monitoring-rendered.yaml)"
           deploy_script="$(printf '%s\n' \
             'set -eu' \
             "printf '%s' '${manifest_base64}' | base64 --decode > /tmp/bookstore.yaml" \
+            "printf '%s' '${monitoring_base64}' | base64 --decode > /tmp/monitoring.yaml" \
             'k3s kubectl apply -f /tmp/bookstore.yaml' \
+            'k3s kubectl create namespace monitoring --dry-run=client -o yaml | k3s kubectl apply -f -' \
+            'k3s kubectl apply --server-side -f /tmp/monitoring.yaml' \
             'namespace=$(awk '\''$1 == "namespace:" { print $2; exit }'\'' /tmp/bookstore.yaml)' \
             'for pod in $(k3s kubectl get pods -n "$namespace" -o custom-columns=NAME:.metadata.name,IMAGE:.spec.containers[0].image --no-headers | awk '\''$2 ~ /^ghcr[.]io\// { print $1 }'\''); do k3s kubectl delete pod "$pod" -n "$namespace" --force --grace-period=0 --ignore-not-found; done' \
             'k3s kubectl rollout status deployment/bookstore-backend -n "$namespace" --timeout=300s || { k3s kubectl get pods -n "$namespace" -o wide; k3s kubectl get events -n "$namespace" --sort-by=.lastTimestamp; exit 1; }' \
@@ -112,6 +131,15 @@ jobs:
             'curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused http://127.0.0.1/health' \
             'curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused http://127.0.0.1/api/books >/dev/null' \
             'echo "HTTP smoke tests passed."' \
+            'k3s kubectl rollout status deployment/monitoring-operator -n monitoring --timeout=600s' \
+            'k3s kubectl rollout status deployment/monitoring-grafana -n monitoring --timeout=600s' \
+            'k3s kubectl rollout status deployment/monitoring-kube-state-metrics -n monitoring --timeout=600s' \
+            'k3s kubectl rollout status daemonset/monitoring-prometheus-node-exporter -n monitoring --timeout=600s' \
+            'k3s kubectl rollout status statefulset/prometheus-monitoring-prometheus -n monitoring --timeout=600s' \
+            'grafana_pod=$(k3s kubectl get pods -n monitoring -l app.kubernetes.io/name=grafana -o jsonpath="{.items[0].metadata.name}")' \
+            'k3s kubectl exec -n monitoring "$grafana_pod" -- wget -qO- http://127.0.0.1:3000/api/health' \
+            'echo "Monitoring smoke test passed."' \
+            'k3s kubectl get pods,service,ingress -n monitoring' \
             'k3s kubectl get deployment,service,ingress -n "$namespace"')"
           command_base64="$(printf '%s' "$deploy_script" | base64 --wrap=0)"
 

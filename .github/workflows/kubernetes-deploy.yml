@@ -105,8 +105,9 @@ jobs:
             "printf '%s' '${manifest_base64}' | base64 --decode > /tmp/bookstore.yaml" \
             'k3s kubectl apply -f /tmp/bookstore.yaml' \
             'namespace=$(awk '\''$1 == "namespace:" { print $2; exit }'\'' /tmp/bookstore.yaml)' \
-            'k3s kubectl rollout status deployment/bookstore-backend -n "$namespace" --timeout=300s' \
-            'k3s kubectl rollout status deployment/bookstore-frontend -n "$namespace" --timeout=300s' \
+            'for pod in $(k3s kubectl get pods -n "$namespace" -o custom-columns=NAME:.metadata.name,IMAGE:.spec.containers[0].image --no-headers | awk '\''$2 ~ /^ghcr[.]io\// { print $1 }'\''); do k3s kubectl delete pod "$pod" -n "$namespace" --force --grace-period=0; done' \
+            'k3s kubectl rollout status deployment/bookstore-backend -n "$namespace" --timeout=300s || { k3s kubectl get pods -n "$namespace" -o wide; k3s kubectl get events -n "$namespace" --sort-by=.lastTimestamp; exit 1; }' \
+            'k3s kubectl rollout status deployment/bookstore-frontend -n "$namespace" --timeout=300s || { k3s kubectl get pods -n "$namespace" -o wide; k3s kubectl get events -n "$namespace" --sort-by=.lastTimestamp; exit 1; }' \
             'k3s kubectl get deployment,service,ingress -n "$namespace"')"
           command_base64="$(printf '%s' "$deploy_script" | base64 --wrap=0)"
 

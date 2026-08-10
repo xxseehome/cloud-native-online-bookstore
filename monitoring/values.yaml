@@ -1,8 +1,8 @@
-global:
-  imageRegistry: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com
 fullnameOverride: monitoring
+
 alertmanager:
   enabled: false
+
 grafana:
   enabled: true
   defaultDashboardsEnabled: true
@@ -12,8 +12,14 @@ grafana:
       maxSurge: 0
       maxUnavailable: 1
   image:
+    registry: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com
     repository: online-bookstore/bookstore-backend
     tag: grafana-13.0.1-security-01
+  sidecar:
+    image:
+      registry: quay.io
+      repository: kiwigrid/k8s-sidecar
+      tag: 2.7.3
   persistence:
     enabled: false
   resources:
@@ -23,8 +29,13 @@ grafana:
     limits:
       cpu: 300m
       memory: 256Mi
+
 prometheus:
   prometheusSpec:
+    image:
+      registry: quay.io
+      repository: prometheus/prometheus
+      tag: v3.11.3-distroless
     retention: 24h
     retentionSize: 512MB
     resources:
@@ -35,6 +46,7 @@ prometheus:
         cpu: 500m
         memory: 512Mi
     storageSpec: {}
+
 prometheusOperator:
   admissionWebhooks:
     enabled: false
@@ -47,8 +59,10 @@ prometheusOperator:
     limits:
       cpu: 200m
       memory: 128Mi
+
 kube-state-metrics:
   image:
+    registry: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com
     repository: online-bookstore/bookstore-backend
     tag: kube-state-metrics-v2.19.0
   resources:
@@ -58,7 +72,13 @@ kube-state-metrics:
     limits:
       cpu: 100m
       memory: 96Mi
+
 prometheus-node-exporter:
+  image:
+    registry: quay.io
+    repository: prometheus/node-exporter
+    tag: v1.11.1-distroless
+    distroless: true
   resources:
     requests:
       cpu: 20m
@@ -66,6 +86,7 @@ prometheus-node-exporter:
     limits:
       cpu: 100m
       memory: 64Mi
+
 kubeEtcd:
   enabled: false
 kubeControllerManager:

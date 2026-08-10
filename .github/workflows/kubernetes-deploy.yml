@@ -174,7 +174,7 @@ jobs:
             'k3s kubectl create namespace monitoring --dry-run=client -o yaml | k3s kubectl apply -f -' \
             'k3s kubectl apply --server-side -f /tmp/monitoring-crds.yaml' \
             'k3s kubectl wait --for=condition=Established --timeout=180s -f /tmp/monitoring-crds.yaml' \
-            'k3s kubectl apply --server-side -f /tmp/monitoring.yaml' \
+            'k3s kubectl apply --server-side --force-conflicts -f /tmp/monitoring.yaml' \
             'namespace=$(awk '\''$1 == "namespace:" { print $2; exit }'\'' /tmp/bookstore.yaml)' \
             'for pod in $(k3s kubectl get pods -n "$namespace" -o custom-columns=NAME:.metadata.name,IMAGE:.spec.containers[0].image --no-headers | awk '\''$2 ~ /^ghcr[.]io\// { print $1 }'\''); do k3s kubectl delete pod "$pod" -n "$namespace" --force --grace-period=0 --ignore-not-found; done' \
             'k3s kubectl rollout status deployment/bookstore-backend -n "$namespace" --timeout=300s || { k3s kubectl get pods -n "$namespace" -o wide; k3s kubectl get events -n "$namespace" --sort-by=.lastTimestamp; exit 1; }' \
@@ -186,7 +186,7 @@ jobs:
             'k3s kubectl delete deployment monitoring-grafana -n monitoring --ignore-not-found --cascade=background --wait=true' \
             'k3s kubectl delete replicaset -n monitoring -l app.kubernetes.io/name=grafana --force --grace-period=0 --ignore-not-found' \
             'k3s kubectl delete pod -n monitoring -l app.kubernetes.io/name=grafana --force --grace-period=0 --ignore-not-found' \
-            'for attempt in $(seq 1 30); do k3s kubectl apply --server-side -f /tmp/monitoring.yaml >/dev/null; k3s kubectl get deployment monitoring-grafana -n monitoring >/dev/null 2>&1 && break; sleep 2; done' \
+            'for attempt in $(seq 1 30); do k3s kubectl apply --server-side --force-conflicts -f /tmp/monitoring.yaml >/dev/null; k3s kubectl get deployment monitoring-grafana -n monitoring >/dev/null 2>&1 && break; sleep 2; done' \
             'k3s kubectl get deployment monitoring-grafana -n monitoring >/dev/null' \
             'k3s kubectl rollout status deployment/monitoring-operator -n monitoring --timeout=600s' \
             'k3s kubectl rollout status deployment/monitoring-grafana -n monitoring --timeout=600s' \

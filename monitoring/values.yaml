@@ -6,6 +6,8 @@ alertmanager:
 grafana:
   enabled: true
   defaultDashboardsEnabled: true
+  deploymentStrategy:
+    type: Recreate
   persistence:
     enabled: false
   resources:

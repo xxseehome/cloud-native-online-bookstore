@@ -183,7 +183,11 @@ jobs:
             'curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused http://127.0.0.1/health' \
             'curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused http://127.0.0.1/api/books >/dev/null' \
             'echo "HTTP smoke tests passed."' \
-            'k3s kubectl delete pod -n monitoring -l app.kubernetes.io/name=grafana --force --grace-period=0 --ignore-not-found' \            'k3s kubectl rollout status deployment/monitoring-operator -n monitoring --timeout=600s' \
+                        'k3s kubectl delete deployment monitoring-grafana -n monitoring --ignore-not-found --cascade=background --wait=false' \
+            'k3s kubectl delete replicaset -n monitoring -l app.kubernetes.io/name=grafana --force --grace-period=0 --ignore-not-found' \
+                        'k3s kubectl rollout status deployment/monitoring-operator -n monitoring --timeout=600s' \
+            'k3s kubectl rollout status deployment/monitoring-grafana -n monitoring --timeout=600s' \
+            'k3s kubectl apply --server-side -f /tmp/monitoring.yaml' \
             'k3s kubectl rollout status deployment/monitoring-grafana -n monitoring --timeout=600s' \
             'k3s kubectl rollout status deployment/monitoring-kube-state-metrics -n monitoring --timeout=600s' \
             'k3s kubectl rollout status daemonset/monitoring-prometheus-node-exporter -n monitoring --timeout=600s' \

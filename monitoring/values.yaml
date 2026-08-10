@@ -48,10 +48,10 @@ prometheus:
     storageSpec: {}
 
 prometheusOperator:
+  tls:
+    enabled: false
   admissionWebhooks:
     enabled: false
-    tls:
-      enabled: false
   resources:
     requests:
       cpu: 50m
@@ -77,7 +77,7 @@ prometheus-node-exporter:
   image:
     registry: quay.io
     repository: prometheus/node-exporter
-    tag: v1.11.1-distroless
+    tag: v1.11.1
     distroless: true
   resources:
     requests:

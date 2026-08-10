@@ -108,6 +108,18 @@ jobs:
           registry: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
+      - name: Mirror monitoring images to Alibaba Cloud Container Registry
+        run: |
+          docker pull docker.io/grafana/grafana:13.0.1-security-01
+          docker tag docker.io/grafana/grafana:13.0.1-security-01 \
+            crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com/online-bookstore/bookstore-backend:grafana-13.0.1-security-01
+          docker push \
+            crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com/online-bookstore/bookstore-backend:grafana-13.0.1-security-01
+          docker pull registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.19.0
+          docker tag registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.19.0 \
+            crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com/online-bookstore/bookstore-backend:kube-state-metrics-v2.19.0
+          docker push \
+            crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com/online-bookstore/bookstore-backend:kube-state-metrics-v2.19.0
       - name: Publish backend image
         uses: docker/build-push-action@v6
         with:

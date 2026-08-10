@@ -162,7 +162,7 @@ jobs:
           run_cloud_command 'rm -f /tmp/deploy-manifests.tgz.b64'
           while IFS= read -r chunk; do
             run_cloud_command "printf '%s' '${chunk}' >> /tmp/deploy-manifests.tgz.b64"
-          done < <(fold --width=6000 <<< "$payload_base64")
+          done < <(fold --width=18000 <<< "$payload_base64")
 
           deploy_script="$(printf '%s\n' \
             'set -eu' \
@@ -185,6 +185,7 @@ jobs:
             'echo "HTTP smoke tests passed."' \
             'k3s kubectl delete deployment monitoring-grafana -n monitoring --ignore-not-found --cascade=background --wait=true' \
             'k3s kubectl delete replicaset -n monitoring -l app.kubernetes.io/name=grafana --force --grace-period=0 --ignore-not-found' \
+            'k3s kubectl delete pod -n monitoring -l app.kubernetes.io/name=grafana --force --grace-period=0 --ignore-not-found' \
             'for attempt in $(seq 1 30); do k3s kubectl apply --server-side -f /tmp/monitoring.yaml >/dev/null; k3s kubectl get deployment monitoring-grafana -n monitoring >/dev/null 2>&1 && break; sleep 2; done' \
             'k3s kubectl get deployment monitoring-grafana -n monitoring >/dev/null' \
             'k3s kubectl rollout status deployment/monitoring-operator -n monitoring --timeout=600s' \

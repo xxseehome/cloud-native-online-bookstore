@@ -1,3 +1,4 @@
+/opt/homebrew/Library/Homebrew/cmd/shellenv.sh: line 18: /bin/ps: Operation not permitted
 name: Kubernetes Deploy
 
 on:
@@ -183,9 +184,9 @@ jobs:
             'curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused http://127.0.0.1/health' \
             'curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused http://127.0.0.1/api/books >/dev/null' \
             'echo "HTTP smoke tests passed."' \
-            'k3s kubectl delete deployment monitoring-grafana -n monitoring --ignore-not-found --cascade=background --wait=true' \
-            'k3s kubectl delete replicaset -n monitoring -l app.kubernetes.io/name=grafana --force --grace-period=0 --ignore-not-found' \
             'k3s kubectl delete pod -n monitoring -l app.kubernetes.io/name=grafana --force --grace-period=0 --ignore-not-found' \
+            'k3s kubectl delete replicaset -n monitoring -l app.kubernetes.io/name=grafana --force --grace-period=0 --ignore-not-found' \
+            'k3s kubectl delete deployment monitoring-grafana -n monitoring --ignore-not-found --cascade=background --wait=true' \
             'for attempt in $(seq 1 30); do k3s kubectl apply --server-side --force-conflicts -f /tmp/monitoring.yaml >/dev/null; k3s kubectl get deployment monitoring-grafana -n monitoring >/dev/null 2>&1 && break; sleep 2; done' \
             'k3s kubectl get deployment monitoring-grafana -n monitoring >/dev/null' \
             'k3s kubectl rollout status deployment/monitoring-operator -n monitoring --timeout=600s' \

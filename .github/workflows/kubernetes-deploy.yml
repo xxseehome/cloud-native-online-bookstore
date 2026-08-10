@@ -9,6 +9,8 @@ on:
         type: choice
         options:
           - development
+          - test
+          - perf
           - staging
           - production
       image_tag:

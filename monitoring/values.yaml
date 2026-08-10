@@ -8,6 +8,7 @@ grafana:
   defaultDashboardsEnabled: true
   deploymentStrategy:
     type: Recreate
+    rollingUpdate: null
   persistence:
     enabled: false
   resources:

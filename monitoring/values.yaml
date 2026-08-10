@@ -1,18 +1,17 @@
+global:
+  imageRegistry: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com
 fullnameOverride: monitoring
-
 alertmanager:
   enabled: false
-
 grafana:
   enabled: true
   defaultDashboardsEnabled: true
   deploymentStrategy:
     type: RollingUpdate
-  rollingUpdate:
-    maxSurge: 0
-    maxUnavailable: 1
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   image:
-    registry: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com
     repository: online-bookstore/bookstore-backend
     tag: grafana-13.0.1-security-01
   persistence:
@@ -36,12 +35,11 @@ prometheus:
         cpu: 500m
         memory: 512Mi
     storageSpec: {}
-
 prometheusOperator:
   admissionWebhooks:
     enabled: false
-  tls:
-    enabled: false
+    tls:
+      enabled: false
   resources:
     requests:
       cpu: 50m
@@ -49,10 +47,8 @@ prometheusOperator:
     limits:
       cpu: 200m
       memory: 128Mi
-
 kube-state-metrics:
   image:
-    registry: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com
     repository: online-bookstore/bookstore-backend
     tag: kube-state-metrics-v2.19.0
   resources:
@@ -62,7 +58,6 @@ kube-state-metrics:
     limits:
       cpu: 100m
       memory: 96Mi
-
 prometheus-node-exporter:
   resources:
     requests:
@@ -71,87 +66,6 @@ prometheus-node-exporter:
     limits:
       cpu: 100m
       memory: 64Mi
-
-kubeEtcd:
-  enabled: false
-kubeControllerManager:
-  enabled: false
-kubeScheduler:
-  enabled: false
-kubeProxy:
-  enabled: false
-fullnameOverride: monitoring
-
-alertmanager:
-  enabled: false
-
-grafana:
-  enabled: true
-  defaultDashboardsEnabled: true
-  deploymentStrategy:
-    type: RollingUpdate
-  rollingUpdate:
-    maxSurge: 0
-    maxUnavailable: 1
-  image:
-    repository: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com/online-bookstore/bookstore-backend
-    tag: grafana-13.0.1-security-01
-  persistence:
-    enabled: false
-  resources:
-    requests:
-      cpu: 50m
-      memory: 128Mi
-    limits:
-      cpu: 300m
-      memory: 256Mi
-prometheus:
-  prometheusSpec:
-    retention: 24h
-    retentionSize: 512MB
-    resources:
-      requests:
-        cpu: 100m
-        memory: 256Mi
-      limits:
-        cpu: 500m
-        memory: 512Mi
-    storageSpec: {}
-
-prometheusOperator:
-  admissionWebhooks:
-    enabled: false
-  tls:
-    enabled: false
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 128Mi
-
-kube-state-metrics:
-  image:
-    repository: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com/online-bookstore/bookstore-backend
-    tag: kube-state-metrics-v2.19.0
-  resources:
-    requests:
-      cpu: 20m
-      memory: 32Mi
-    limits:
-      cpu: 100m
-      memory: 96Mi
-
-prometheus-node-exporter:
-  resources:
-    requests:
-      cpu: 20m
-      memory: 24Mi
-    limits:
-      cpu: 100m
-      memory: 64Mi
-
 kubeEtcd:
   enabled: false
 kubeControllerManager:

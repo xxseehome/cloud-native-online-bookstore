@@ -1,9 +1,7 @@
 fullnameOverride: monitoring
 
-
 alertmanager:
   enabled: false
-
 
 grafana:
   enabled: true
@@ -33,7 +31,6 @@ prometheus:
         memory: 512Mi
     storageSpec: {}
 
-
 prometheusOperator:
   admissionWebhooks:
     enabled: false
@@ -47,7 +44,6 @@ prometheusOperator:
       cpu: 200m
       memory: 128Mi
 
-
 kube-state-metrics:
   resources:
     requests:
@@ -57,7 +53,6 @@ kube-state-metrics:
       cpu: 100m
       memory: 96Mi
 
-
 prometheus-node-exporter:
   resources:
     requests:
@@ -66,3 +61,12 @@ prometheus-node-exporter:
     limits:
       cpu: 100m
       memory: 64Mi
+
+kubeEtcd:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false

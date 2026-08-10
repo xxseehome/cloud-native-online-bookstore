@@ -11,6 +11,9 @@ grafana:
   rollingUpdate:
     maxSurge: 0
     maxUnavailable: 1
+  image:
+    repository: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com/online-bookstore/bookstore-backend
+    tag: grafana-13.0.1-security-01
   persistence:
     enabled: false
   resources:
@@ -47,6 +50,9 @@ prometheusOperator:
       memory: 128Mi
 
 kube-state-metrics:
+  image:
+    repository: crpi-guf725ppv0myjkdj.cn-hangzhou.personal.cr.aliyuncs.com/online-bookstore/bookstore-backend
+    tag: kube-state-metrics-v2.19.0
   resources:
     requests:
       cpu: 20m

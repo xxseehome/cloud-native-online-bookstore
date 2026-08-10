@@ -1,4 +1,6 @@
-name: Kubernetes Deploy
+            'for attempt in $(seq 1 30); do k3s kubectl apply --server-side -f /tmp/monitoring.yaml >/dev/null; k3s kubectl get deployment monitoring-grafana -n monitoring >/dev/null 2>&1 && break; sleep 2; done' \
+            'k3s kubectl get deployment monitoring-grafana -n monitoring >/dev/null' \
+            'k3s kubectl rollout status deployment/monitoring-operator -n monitoring --timeout=600s' \
 
 on:
   workflow_dispatch:

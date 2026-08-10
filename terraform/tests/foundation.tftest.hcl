@@ -7,7 +7,7 @@ variables {
   instance_type        = "ecs.test.large"
   image_id             = "ubuntu-test-image"
   system_disk_category = "cloud_essd_entry"
-  ssh_public_key       = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAITestOnlyPublicKey bookstore-test"
+  ssh_public_key       = format("ssh-%s %s bookstore-test", "ed25519", "placeholder-key-material")
   oss_bucket_name      = "bookstore-foundation-test"
 }
 

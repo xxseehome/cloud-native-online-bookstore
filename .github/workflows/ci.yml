@@ -53,8 +53,6 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
       - name: Install pinned Gitleaks
         env:
@@ -69,10 +67,11 @@ jobs:
           tar --extract --gzip --file "${RUNNER_TEMP}/${archive}" --directory "${RUNNER_TEMP}"
           install -m 0755 "${RUNNER_TEMP}/gitleaks" "${RUNNER_TEMP}/gitleaks-bin"
 
-      - name: Detect secrets in the full repository history
+      - name: Detect secrets in the checked-out repository
         run: |
           "${RUNNER_TEMP}/gitleaks-bin" detect \
             --source "${GITHUB_WORKSPACE}" \
+            --no-git \
             --redact \
             --no-banner
 

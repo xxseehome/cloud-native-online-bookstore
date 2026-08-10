@@ -6,7 +6,7 @@ Kubernetes promotion.
 
 | Control | Pinned tool | Scope | Failure threshold |
 | --- | --- | --- | --- |
-| Secret detection | Gitleaks 8.30.0 | Full repository history and working tree | Any detected secret |
+| Secret detection | Gitleaks 8.30.0 | Checked-out repository tree and pull-request contents | Any detected secret |
 | Vulnerability and configuration scan | Trivy 0.70.0 | Source, Terraform, Kubernetes files, backend image, frontend image | High or critical findings that are fixable |
 | Policy validation | OPA via Conftest 0.56.0 | Kustomize output for all five environments | Any policy denial |
 

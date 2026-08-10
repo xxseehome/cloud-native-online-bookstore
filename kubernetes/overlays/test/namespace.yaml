@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bookstore-test
+  labels:
+    app.kubernetes.io/part-of: online-bookstore
+    environment: test

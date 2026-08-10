@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bookstore-perf
+  labels:
+    app.kubernetes.io/part-of: online-bookstore
+    environment: performance

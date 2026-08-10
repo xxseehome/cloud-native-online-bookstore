@@ -23,7 +23,7 @@ jobs:
           version: v1.33.6
       - name: Render all environment overlays
         run: |
-          for environment in development staging production; do
+          for environment in development test perf staging production; do
             kubectl kustomize "kubernetes/overlays/${environment}" > "/tmp/${environment}.yaml"
             grep -q 'kind: Deployment' "/tmp/${environment}.yaml"
             grep -q 'kind: Ingress' "/tmp/${environment}.yaml"

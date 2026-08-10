@@ -73,9 +73,15 @@ demonstration:
 - one VPC and vSwitch;
 - one security group;
 - one ECS-hosted K3s cluster;
-- one external load balancer;
+- one private, versioned OSS bucket;
 - separate Kubernetes namespaces for workload isolation.
 
-This is a cost-conscious demonstration design. Separate clusters or accounts
-would be preferred for strongly isolated production systems, but are outside the
-scope of this one-week exercise.
+ALB/SLB is intentionally **disabled** (`enable_alb = false`). The current
+demonstration uses the ECS public IP and Traefik ingress to avoid an additional
+load-balancer charge while the account-specific free-trial entitlement is
+being verified. This is a cost-control choice, not a production availability
+recommendation. A production deployment should use a multi-zone ALB/SLB after
+its entitlement, listeners, health checks, and Terraform import are confirmed.
+
+Separate clusters or accounts would be preferred for strongly isolated
+production systems, but are outside the scope of this one-week exercise.

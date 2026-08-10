@@ -4,14 +4,11 @@ A cloud-native online bookstore platform built on Alibaba Cloud and Kubernetes.
 
 ## Architecture
 
-The application uses a multi-tier architecture:
-
-User
-→ Load Balancer
-→ Kubernetes Ingress
-→ Frontend
-→ Backend API
-→ Alibaba Cloud OSS
+The demonstration uses the ECS public IP as its entry point (ALB/SLB is
+disabled for cost control), followed by Traefik Ingress, an Nginx frontend, and
+the FastAPI backend. Terraform also provisions a private, encrypted, versioned
+OSS bucket as the storage foundation. See the complete
+[platform architecture](docs/architecture.md).
 
 ## Platform
 
@@ -72,3 +69,9 @@ used.
 Staging and production deployments require approval. See
 [Environment Strategy](docs/environment-strategy.md) for the namespace,
 promotion, and branching model.
+
+## Evidence
+
+The [acceptance evidence](docs/acceptance-evidence.md) records the immutable
+image SHA, five promotion runs, smoke-test results, security gates, and links to
+the GitHub Actions logs used for review.

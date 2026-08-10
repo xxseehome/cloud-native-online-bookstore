@@ -52,10 +52,11 @@ tested artifact different from the production artifact.
   reviewer once the required checks pass.
 - Staging requires a GitHub Environment approval.
 - Production requires a separate GitHub Environment approval.
-- Open Policy Agent policies verify that staging and production are configured
-  with approval requirements.
-- Gitleaks runs before any deployment and OPA verifies that the pipeline includes
-  the required secret-scanning control.
+- Gitleaks, Trivy, and OPA/Conftest run before image publication and deployment.
+- OPA policies verify the rendered manifests use immutable images and safe
+  container security settings.
+- GitHub Environment protection rules provide the staging and production
+  approvals.
 
 ## Kubernetes Configuration
 

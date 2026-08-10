@@ -45,9 +45,11 @@ constraints, and the staged deployment workflow.
 
 ## Security
 
-- Gitleaks
-- Trivy
-- Open Policy Agent (OPA)
+- Gitleaks secret detection, Trivy vulnerability/configuration scanning, and
+  Open Policy Agent (OPA)/Conftest Kubernetes policy checks run in CI before
+  images can be published.
+- See [Security Controls](docs/security-controls.md) for the policy scope and
+  pinned scanner versions.
 
 ## Environments and Promotion
 

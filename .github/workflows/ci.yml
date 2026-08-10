@@ -47,6 +47,129 @@ jobs:
           PYTHONPATH: .
         run: python -m pytest -v tests/unit
 
+  gitleaks:
+    name: Gitleaks secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v5
+
+      - name: Install pinned Gitleaks
+        env:
+          GITLEAKS_VERSION: "8.30.0"
+        run: |
+          set -euo pipefail
+          archive="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          base_url="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+          curl --fail --location --silent --show-error "${base_url}/${archive}" --output "${RUNNER_TEMP}/${archive}"
+          curl --fail --location --silent --show-error "${base_url}/gitleaks_${GITLEAKS_VERSION}_checksums.txt" --output "${RUNNER_TEMP}/gitleaks-checksums.txt"
+          (cd "${RUNNER_TEMP}" && grep "${archive}" gitleaks-checksums.txt | sha256sum --check --status)
+          tar --extract --gzip --file "${RUNNER_TEMP}/${archive}" --directory "${RUNNER_TEMP}"
+          install -m 0755 "${RUNNER_TEMP}/gitleaks" "${RUNNER_TEMP}/gitleaks-bin"
+
+      - name: Detect secrets in the checked-out repository
+        run: |
+          "${RUNNER_TEMP}/gitleaks-bin" detect \
+            --source "${GITHUB_WORKSPACE}" \
+            --no-git \
+            --config "${GITHUB_WORKSPACE}/.gitleaks.toml" \
+            --redact \
+            --no-banner
+
+  trivy:
+    name: Trivy filesystem and image scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v5
+
+      - name: Install pinned Trivy
+        env:
+          TRIVY_VERSION: "0.70.0"
+        run: |
+          set -euo pipefail
+          archive="trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+          base_url="https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}"
+          curl --fail --location --silent --show-error "${base_url}/${archive}" --output "${RUNNER_TEMP}/${archive}"
+          curl --fail --location --silent --show-error "${base_url}/trivy_${TRIVY_VERSION}_checksums.txt" --output "${RUNNER_TEMP}/trivy-checksums.txt"
+          (cd "${RUNNER_TEMP}" && grep "${archive}" trivy-checksums.txt | sha256sum --check --status)
+          tar --extract --gzip --file "${RUNNER_TEMP}/${archive}" --directory "${RUNNER_TEMP}"
+          install -m 0755 "${RUNNER_TEMP}/trivy" "${RUNNER_TEMP}/trivy-bin"
+
+      - name: Scan source, Terraform, and Kubernetes configuration
+        run: |
+          "${RUNNER_TEMP}/trivy-bin" fs . \
+            --skip-dirs .git \
+            --scanners vuln,misconfig,secret \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --exit-code 1
+
+      - name: Build images for vulnerability scanning
+        run: |
+          docker build --tag "bookstore-backend:${GITHUB_SHA}" backend
+          docker build --tag "bookstore-frontend:${GITHUB_SHA}" frontend
+
+      - name: Scan backend image
+        run: |
+          "${RUNNER_TEMP}/trivy-bin" image "bookstore-backend:${GITHUB_SHA}" \
+            --scanners vuln,secret \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --exit-code 1
+
+      - name: Scan frontend image
+        run: |
+          "${RUNNER_TEMP}/trivy-bin" image "bookstore-frontend:${GITHUB_SHA}" \
+            --scanners vuln,secret \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --exit-code 1
+
+  opa:
+    name: OPA Kubernetes policy checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v5
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.33.6
+
+      - name: Render all environment manifests with immutable image tags
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/rendered"
+          for environment in development test perf staging production; do
+            kubectl kustomize "kubernetes/overlays/${environment}" \
+              | sed "s/IMAGE_TAG/${IMAGE_TAG}/g" \
+              > "${RUNNER_TEMP}/rendered/${environment}.yaml"
+          done
+
+      - name: Install pinned Conftest
+        env:
+          CONFTEST_VERSION: "0.56.0"
+        run: |
+          set -euo pipefail
+          archive="conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz"
+          base_url="https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}"
+          curl --fail --location --silent --show-error "${base_url}/${archive}" --output "${RUNNER_TEMP}/${archive}"
+          curl --fail --location --silent --show-error "${base_url}/checksums.txt" --output "${RUNNER_TEMP}/conftest-checksums.txt"
+          (cd "${RUNNER_TEMP}" && grep "${archive}" conftest-checksums.txt | sha256sum --check --status)
+          tar --extract --gzip --file "${RUNNER_TEMP}/${archive}" --directory "${RUNNER_TEMP}"
+          install -m 0755 "${RUNNER_TEMP}/conftest" "${RUNNER_TEMP}/conftest-bin"
+
+      - name: Enforce OPA policies
+        run: |
+          "${RUNNER_TEMP}/conftest-bin" test \
+            --policy policies \
+            --fail-on-warn \
+            "${RUNNER_TEMP}/rendered"
+
   container-build:
     needs: backend-test
     runs-on: ubuntu-latest
@@ -86,7 +209,11 @@ jobs:
 
   publish-images:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: container-build
+    needs:
+      - container-build
+      - gitleaks
+      - trivy
+      - opa
     runs-on: ubuntu-latest
     permissions:
       contents: read

@@ -21,7 +21,7 @@ internet_max_bandwidth_out = 100
 system_disk_category       = "cloud_essd_entry"
 
 # Public key only. Never add the matching private key to this repository or Terraform state.
-ssh_public_key = "ssh-ed25519 REPLACE_WITH_PUBLIC_KEY bookstore-admin"
+ssh_public_key = "replace-with-public-key"
 
 # OSS bucket names are globally unique. Use the local-redundancy 20 GB free trial.
 oss_bucket_name = "bookstore-demo-REPLACE_WITH_UNIQUE_SUFFIX"

@@ -12,7 +12,9 @@ Kubernetes promotion.
 
 The workflow downloads release archives from the projects' official GitHub
 releases and verifies their published SHA-256 checksum before execution. It does
-not use floating `latest` scanner tags.
+not use floating `latest` scanner tags. The repository Gitleaks config only
+allowlists GitHub Actions expressions such as `${{ secrets.ACR_PASSWORD }}`;
+actual credential values remain blocked.
 
 ## OPA policy guarantees
 

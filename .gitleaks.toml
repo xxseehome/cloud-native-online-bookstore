@@ -1,0 +1,8 @@
+title = "Cloud Native Online Book Store Gitleaks policy"
+
+[allowlist]
+description = "GitHub Actions secret references are placeholders, not credential values."
+regexTarget = "match"
+regexes = [
+  '''\$\{\{\s*secrets\.[A-Za-z_][A-Za-z0-9_]*\s*\}\}''',
+]

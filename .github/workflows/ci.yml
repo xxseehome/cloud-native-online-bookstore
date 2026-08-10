@@ -72,6 +72,7 @@ jobs:
           "${RUNNER_TEMP}/gitleaks-bin" detect \
             --source "${GITHUB_WORKSPACE}" \
             --no-git \
+            --config "${GITHUB_WORKSPACE}/.gitleaks.toml" \
             --redact \
             --no-banner
 

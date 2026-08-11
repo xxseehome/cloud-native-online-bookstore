@@ -47,6 +47,23 @@ jobs:
           PYTHONPATH: .
         run: python -m pytest -v tests/unit
 
+  code-quality:
+    name: Ruff code quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install pinned Ruff
+        run: python -m pip install --disable-pip-version-check ruff==0.16.0
+      - name: Check Python lint
+        run: ruff check backend tests
+      - name: Check Python formatting
+        run: ruff format --check backend tests
+
   gitleaks:
     name: Gitleaks secret scan
     runs-on: ubuntu-latest
@@ -170,8 +187,24 @@ jobs:
             --fail-on-warn \
             "${RUNNER_TEMP}/rendered"
 
+      - name: Verify Rego policy unit tests
+        run: |
+          "${RUNNER_TEMP}/conftest-bin" verify --policy policies
+
+      - name: Enforce workflow policy
+        run: |
+          "${RUNNER_TEMP}/conftest-bin" test \
+            --policy policies \
+            --fail-on-warn \
+            .github/workflows/ci.yml \
+            .github/workflows/kubernetes-deploy.yml \
+            .github/workflows/kubernetes-resilience.yml
+
   container-build:
-    needs: backend-test
+    needs:
+      - backend-test
+      - code-quality
+      - kubernetes-manifest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
@@ -214,6 +247,8 @@ jobs:
       - gitleaks
       - trivy
       - opa
+      - code-quality
+      - kubernetes-manifest
     runs-on: ubuntu-latest
     permissions:
       contents: read

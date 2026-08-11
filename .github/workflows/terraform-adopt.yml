@@ -125,8 +125,12 @@ jobs:
           import_if_missing() {
             local address="$1"
             local expected_id="$2"
+            local state_addresses
 
-            if terraform state list | grep -Fqx "$address"; then
+            # Avoid setup-terraform wrapper EPIPE.
+            state_addresses="$(terraform state list)"
+
+            if [[ $'\n'"$state_addresses"$'\n' == *$'\n'"$address"$'\n'* ]]; then
               local current_id
               current_id="$(terraform state show -no-color "$address" | awk '$1 == "id" && $2 == "=" { gsub(/\"/, "", $3); print $3; exit }')"
               if [[ "$current_id" != "$expected_id" ]]; then

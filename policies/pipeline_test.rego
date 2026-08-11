@@ -58,11 +58,37 @@ test_kubernetes_workflow_rejects_missing_approval {
   }
 }
 
+test_kubernetes_workflow_requires_image_tag {
+  kubernetes_deploy_requires_image_tag with input as {
+    "name": "Kubernetes Deploy",
+    "on": {
+      "workflow_dispatch": {
+        "inputs": {
+          "image_tag": {"required": true}
+        }
+      }
+    }
+  }
+}
+
 test_resilience_workflow_requires_staging_approval {
   resilience_has_staging_approval with input as {
     "jobs": {
       "approval": {"environment": "staging"},
       "check": {"needs": "approval"}
+    }
+  }
+}
+
+test_resilience_workflow_requires_image_sha {
+  resilience_requires_image_sha with input as {
+    "name": "Kubernetes Resilience Check",
+    "on": {
+      "workflow_dispatch": {
+        "inputs": {
+          "expected_image_sha": {"required": true}
+        }
+      }
     }
   }
 }

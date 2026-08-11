@@ -41,15 +41,9 @@ kubernetes_deploy_has_approval {
 }
 
 kubernetes_workflow_dispatch_inputs[inputs] {
-  inputs := input.on.workflow_dispatch.inputs
-}
-
-kubernetes_workflow_dispatch_inputs[inputs] {
-  inputs := input["on"].workflow_dispatch.inputs
-}
-
-kubernetes_workflow_dispatch_inputs[inputs] {
-  inputs := input[true].workflow_dispatch.inputs
+  some key
+  workflow := input[key]
+  inputs := workflow.workflow_dispatch.inputs
 }
 
 kubernetes_deploy_requires_image_tag {

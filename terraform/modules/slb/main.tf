@@ -39,16 +39,16 @@ resource "alicloud_slb_server_group_server_attachment" "ecs" {
 }
 
 resource "alicloud_slb_listener" "http" {
-  load_balancer_id        = alicloud_slb_load_balancer.this.id
-  protocol                = "http"
-  frontend_port           = var.frontend_port
-  backend_port            = var.backend_port
-  server_group_id         = alicloud_slb_server_group.this.id
-  scheduler               = "wrr"
-  health_check            = "on"
-  health_check_uri        = var.health_check_uri
+  load_balancer_id          = alicloud_slb_load_balancer.this.id
+  protocol                  = "http"
+  frontend_port             = var.frontend_port
+  backend_port              = var.backend_port
+  server_group_id           = alicloud_slb_server_group.this.id
+  scheduler                 = "wrr"
+  health_check              = "on"
+  health_check_uri          = var.health_check_uri
   health_check_connect_port = var.backend_port
-  health_check_http_code  = "http_2xx"
+  health_check_http_code    = "http_2xx"
 
   # The backend attachment must exist before the listener is bound to it.
   depends_on = [alicloud_slb_server_group_server_attachment.ecs]

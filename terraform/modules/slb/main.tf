@@ -39,13 +39,15 @@ resource "alicloud_slb_server_group_server_attachment" "ecs" {
 }
 
 resource "alicloud_slb_listener" "http" {
-  load_balancer_id          = alicloud_slb_load_balancer.this.id
-  protocol                  = "http"
-  frontend_port             = var.frontend_port
-  backend_port              = var.backend_port
-  server_group_id           = alicloud_slb_server_group.this.id
-  scheduler                 = "wrr"
-  health_check              = "on"
+  load_balancer_id = alicloud_slb_load_balancer.this.id
+  protocol         = "http"
+  frontend_port    = var.frontend_port
+  backend_port     = var.backend_port
+  server_group_id  = alicloud_slb_server_group.this.id
+  scheduler        = "wrr"
+  health_check     = "on"
+  # FastAPI exposes /health through GET; the CLB default HEAD probe receives 405.
+  health_check_method       = "get"
   health_check_uri          = var.health_check_uri
   health_check_connect_port = var.backend_port
   health_check_http_code    = "http_2xx"

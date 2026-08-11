@@ -9,7 +9,7 @@
 | Frontend image tag | `e58691acb4d4e37a8f957e3df5b71b4802eeba1a` |
 | Registry | Hangzhou ACR Personal (GHCR is the build/publish fallback) |
 | Cluster | One K3s node on Alibaba Cloud ECS, `cn-hangzhou` |
-| External entry point | SLB trial + Traefik HTTP ingress after adoption; ECS public IP remains the fallback |
+| External entry point | CLB (SLB) trial public IP + Traefik HTTP ingress; production has an IP-only fallback route |
 
 The deployment workflow rejects tags that are not full 40-character commit
 SHAs. Every row below therefore points to a promotion run using the exact same
@@ -52,7 +52,7 @@ notes (do not put credentials or tokens in screenshots):
    SHA link.
 3. Staging and Production run summaries showing the approval event and green
    `Deploy through ECS Cloud Assistant` job.
-4. The application page at `http://<ECS-public-IP>/` and the `/health` response.
+4. The application page at `http://<CLB-public-IP>/` and the `/health` response.
 5. Grafana/monitoring rollout and smoke-test output from the same deployment.
 
 These screenshots complement, rather than replace, the immutable GitHub

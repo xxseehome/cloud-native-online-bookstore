@@ -77,14 +77,15 @@ demonstration:
 - separate Kubernetes namespaces for workload isolation.
 
 ALB/SLB is controlled by mutually exclusive Terraform flags. Both are
-**disabled by default** (`enable_alb = false`, `enable_slb = false`). The
-selected cost-controlled path is the account's **SLB free trial**: after the
-console-created trial instance is imported, Terraform manages its HTTP
-listener, health check, server group and ECS backend. Until that adoption is
-complete, the demonstration continues to use the ECS public IP and Traefik
-ingress. This is a cost-control choice, not a production availability
-recommendation. A production deployment should use a multi-zone ALB/SLB after
-its entitlement, listeners, health checks, and Terraform import are confirmed.
+**disabled by default** (`enable_alb = false`, `enable_slb = false`), and the
+deployed variables enable only the account's **CLB (SLB) free trial**. Terraform
+manages its HTTP listener, health check, server group and ECS backend after the
+console-created trial instance is imported. The production overlay includes a
+hostless fallback ingress so the CLB public IP works without a purchased DNS
+name; direct ECS HTTP access is restricted to the VPC. This is a cost-control
+choice, not a production availability recommendation. A production deployment
+should use a multi-zone ALB/SLB after its entitlement, listeners, health checks,
+and Terraform import are confirmed.
 
 Separate clusters or accounts would be preferred for strongly isolated
 production systems, but are outside the scope of this one-week exercise.

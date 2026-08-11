@@ -109,7 +109,7 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 | `TF_INTERNET_MAX_BANDWIDTH_OUT` | `100` to preserve the trial instance configuration; traffic limits still apply |
 | `TF_OSS_BUCKET_NAME` | Globally unique application bucket name |
 | `TF_ENABLE_ALB` | `false` until the ALB trial/import is ready |
-| `TF_ENABLE_SLB` | `false` until the SLB free-trial instance is imported |
+| `TF_ENABLE_SLB` | `true` after the CLB (SLB) free-trial instance is imported |
 | `TF_EXISTING_SLB_ID` | Trial SLB ID from the Hangzhou console; required only when `TF_ENABLE_SLB=true` |
 | `TF_EXISTING_VPC_ID` | `vpc-bp15izs541lrz2xnc2b7j` |
 | `TF_EXISTING_VSWITCH_ID` | `vsw-bp1d2g0o04pfsnxdp0y3a` |
@@ -187,7 +187,7 @@ created earlier in the same workflow run.
 - Remote state is private, encrypted, and versioned.
 - The OSS backend has no backend-level lock. Run Terraform only through these
   workflows. Production environments should add Tablestore locking.
-- ALB and SLB remain disabled by default until the selected trial resource can
-  be imported. Never enable both flags.
+- ALB and SLB default to disabled in code. Enable only the selected trial
+  resource after it has been imported; never enable both flags.
 - Resource adoption writes remote Terraform state but never changes Alibaba
   Cloud resources; the protected environment provides an explicit approval.

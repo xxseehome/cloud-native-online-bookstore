@@ -4,6 +4,7 @@ namespace: bookstore-production
 resources:
   - ../../base
   - namespace.yaml
+  - ip-access-ingress.yaml
 replicas:
   - name: bookstore-backend
     count: 2

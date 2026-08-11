@@ -9,7 +9,7 @@ five separate ECS or Kubernetes clusters.
 
 ```mermaid
 flowchart LR
-    User[Browser user] --> Entry[SLB trial or ECS public IP :80]
+    User[Browser user] --> Entry[CLB trial public IP :80]
     Entry --> Traefik[Traefik Ingress in K3s]
     Traefik --> Frontend[bookstore-frontend\nNginx :80]
     Traefik --> Backend[bookstore-backend\nFastAPI :8000]
@@ -19,9 +19,10 @@ flowchart LR
 
 The current catalog is an in-memory demonstration dataset. The private OSS
 bucket is provisioned by Terraform as the storage foundation and is not needed
-for the current read-only API path. The ingress host is represented by the ECS
-public IP for this cost-controlled demonstration, so a DNS name and TLS
-certificate are deliberately out of scope.
+for the current read-only API path. Production has a hostless fallback ingress
+so the CLB public IP can be used without purchasing a DNS name. A DNS name and
+TLS certificate are deliberately out of scope for this cost-controlled
+demonstration.
 
 ## Infrastructure architecture
 
@@ -30,7 +31,7 @@ flowchart TB
     subgraph Alibaba[Alibaba Cloud - cn-hangzhou]
         VPC[VPC 10.20.0.0/16]
         VS[vSwitches]
-        SG[Security Group\nHTTP public; SSH restricted]
+        SG[Security Group\nHTTP from CLB VPC; SSH restricted]
         ECS[ECS instance\nUbuntu 22.04\nK3s single node]
         SLB[Optional SLB trial\nHTTP listener + health check]
         OSS[(OSS\nprivate, encrypted, versioned)]
@@ -65,9 +66,10 @@ flowchart TB
 Terraform manages the VPC, vSwitch, security group, adopted ECS foundation,
 K3s bootstrap inputs, and OSS bucket. `enable_slb` and `enable_alb` are mutually
 exclusive and default to `false`. The selected cost-controlled path is the
-account's free SLB trial; when it is not active, the ECS public IP remains the
-fallback entry point. The SLB trial instance is imported into Terraform, after
-which Terraform manages its HTTP listener, health check and ECS backend.
+account's free CLB (SLB) trial. The trial instance is imported into Terraform,
+after which Terraform manages its HTTP listener, health check and ECS backend.
+The ECS HTTP security-group rule accepts traffic only from the VPC, so the CLB
+is the external entry point.
 
 ## Delivery pipeline
 

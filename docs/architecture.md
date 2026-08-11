@@ -9,8 +9,8 @@ five separate ECS or Kubernetes clusters.
 
 ```mermaid
 flowchart LR
-    User[Browser user] --> IP[ECS public IP :80]
-    IP --> Traefik[Traefik Ingress in K3s]
+    User[Browser user] --> Entry[SLB trial or ECS public IP :80]
+    Entry --> Traefik[Traefik Ingress in K3s]
     Traefik --> Frontend[bookstore-frontend\nNginx :80]
     Traefik --> Backend[bookstore-backend\nFastAPI :8000]
     Frontend -->|/api and /health| Backend
@@ -32,9 +32,11 @@ flowchart TB
         VS[vSwitches]
         SG[Security Group\nHTTP public; SSH restricted]
         ECS[ECS instance\nUbuntu 22.04\nK3s single node]
+        SLB[Optional SLB trial\nHTTP listener + health check]
         OSS[(OSS\nprivate, encrypted, versioned)]
         ACR[ACR Personal\nbackend/frontend images]
         VPC --> VS --> SG --> ECS
+        SLB -->|ECS backend :80| ECS
         ECS -. intranet endpoint .-> OSS
         ECS -->|pull by immutable tag| ACR
     end
@@ -61,11 +63,11 @@ flowchart TB
 ```
 
 Terraform manages the VPC, vSwitch, security group, adopted ECS foundation,
-K3s bootstrap inputs, and OSS bucket. `enable_alb` is `false`, so no ALB/SLB is
-created in this deployment. The ECS public IP avoids an additional load
-balancer charge while the account-specific free-trial entitlement is being
-verified. ALB can be enabled later only after its entitlement, two vSwitches,
-and import path are confirmed.
+K3s bootstrap inputs, and OSS bucket. `enable_slb` and `enable_alb` are mutually
+exclusive and default to `false`. The selected cost-controlled path is the
+account's free SLB trial; when it is not active, the ECS public IP remains the
+fallback entry point. The SLB trial instance is imported into Terraform, after
+which Terraform manages its HTTP listener, health check and ECS backend.
 
 ## Delivery pipeline
 

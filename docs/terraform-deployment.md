@@ -109,6 +109,8 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 | `TF_INTERNET_MAX_BANDWIDTH_OUT` | `100` to preserve the trial instance configuration; traffic limits still apply |
 | `TF_OSS_BUCKET_NAME` | Globally unique application bucket name |
 | `TF_ENABLE_ALB` | `false` until the ALB trial/import is ready |
+| `TF_ENABLE_SLB` | `false` until the SLB free-trial instance is imported |
+| `TF_EXISTING_SLB_ID` | Trial SLB ID from the Hangzhou console; required only when `TF_ENABLE_SLB=true` |
 | `TF_EXISTING_VPC_ID` | `vpc-bp15izs541lrz2xnc2b7j` |
 | `TF_EXISTING_VSWITCH_ID` | `vsw-bp1d2g0o04pfsnxdp0y3a` |
 | `TF_EXISTING_SECURITY_GROUP_ID` | `sg-bp1e67jdt4t6c9y90298` |
@@ -131,8 +133,9 @@ the configuration in another account or region.
 ## 5. Adopt the console-created free-trial resources once
 
 The ECS free-trial flow created the VPC, vSwitch, security group, and instance
-before Terraform state existed. Do not run a normal apply until these resources
-are adopted.
+before Terraform state existed. The SLB trial is also created in the console
+before Terraform state exists. Do not run a normal apply until the existing
+resources are adopted.
 
 1. Open **Actions -> Terraform Adopt Existing Resources -> Run workflow**.
 2. Select `main` and enter `i-bp1e67jdt4t6c9y8kbgt` as the confirmation.
@@ -144,6 +147,12 @@ are adopted.
    module.network.alicloud_vswitch.this[0]
    module.network.alicloud_security_group.k3s
    module.compute.alicloud_instance.k3s
+   ```
+
+   When `TF_ENABLE_SLB=true`, the summary must also include:
+
+   ```text
+   module.slb[0].alicloud_slb_load_balancer.this
    ```
 
 The workflow is idempotent, rejects an existing state address that points to a
@@ -178,6 +187,7 @@ created earlier in the same workflow run.
 - Remote state is private, encrypted, and versioned.
 - The OSS backend has no backend-level lock. Run Terraform only through these
   workflows. Production environments should add Tablestore locking.
-- ALB remains disabled by default until its trial resources can be imported.
+- ALB and SLB remain disabled by default until the selected trial resource can
+  be imported. Never enable both flags.
 - Resource adoption writes remote Terraform state but never changes Alibaba
   Cloud resources; the protected environment provides an explicit approval.

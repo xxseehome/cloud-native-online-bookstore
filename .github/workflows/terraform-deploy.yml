@@ -49,6 +49,7 @@ jobs:
       TF_VAR_internet_max_bandwidth_out: ${{ vars.TF_INTERNET_MAX_BANDWIDTH_OUT }}
       TF_VAR_oss_bucket_name: ${{ vars.TF_OSS_BUCKET_NAME }}
       TF_VAR_enable_alb: ${{ vars.TF_ENABLE_ALB }}
+      TF_VAR_enable_slb: ${{ vars.TF_ENABLE_SLB || 'false' }}
       TF_VAR_ssh_public_key: ${{ secrets.TF_SSH_PUBLIC_KEY }}
     steps:
       - name: Checkout source code
@@ -70,7 +71,7 @@ jobs:
             TF_VAR_ssh_ingress_cidrs TF_VAR_k3s_api_ingress_cidrs \
             TF_VAR_instance_type TF_VAR_image_id TF_VAR_system_disk_category \
             TF_VAR_internet_max_bandwidth_out \
-            TF_VAR_oss_bucket_name TF_VAR_enable_alb TF_VAR_ssh_public_key; do
+            TF_VAR_oss_bucket_name TF_VAR_enable_alb TF_VAR_enable_slb TF_VAR_ssh_public_key; do
             if [[ -z "${!name}" ]]; then
               echo "::error::Missing GitHub configuration: ${name}"
               missing=1

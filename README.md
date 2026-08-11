@@ -4,10 +4,12 @@ A cloud-native online bookstore platform built on Alibaba Cloud and Kubernetes.
 
 ## Architecture
 
-The demonstration uses the ECS public IP as its entry point (ALB/SLB is
-disabled for cost control), followed by Traefik Ingress, an Nginx frontend, and
-the FastAPI backend. Terraform also provisions a private, encrypted, versioned
-OSS bucket as the storage foundation. See the complete
+The demonstration uses the free-trial SLB as its preferred entry point after
+state adoption, with the ECS public IP retained as a cost-safe fallback. Both
+load-balancer modes are disabled by default until the selected trial resource is
+imported. Traffic then reaches Traefik Ingress, an Nginx frontend, and the
+FastAPI backend. Terraform also provisions a private, encrypted, versioned OSS
+bucket as the storage foundation. See the complete
 [platform architecture](docs/architecture.md).
 
 ## Platform
@@ -21,7 +23,7 @@ OSS bucket as the storage foundation. See the complete
 
 ## Infrastructure as Code
 
-- Terraform modules for VPC, ECS/K3s, OSS, and optional ALB
+- Terraform modules for VPC, ECS/K3s, OSS, and optional ALB/SLB
 - Pull-request formatting, validation, and mocked infrastructure tests
 - Cost-safe defaults that do not apply cloud resources from CI
 

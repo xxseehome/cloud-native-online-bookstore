@@ -20,6 +20,11 @@ run "cost_safe_defaults" {
   }
 
   assert {
+    condition     = output.slb_id == null
+    error_message = "SLB must remain disabled by default until the free-trial instance is explicitly adopted."
+  }
+
+  assert {
     condition     = length(output.vswitch_ids) == 2
     error_message = "The network module must create one vSwitch for each supplied availability zone."
   }
@@ -40,6 +45,17 @@ run "alb_rejects_one_zone" {
   }
 
   expect_failures = [check.alb_requires_two_zones]
+}
+
+run "load_balancers_are_mutually_exclusive" {
+  command = plan
+
+  variables {
+    enable_alb = true
+    enable_slb = true
+  }
+
+  expect_failures = [check.only_one_public_load_balancer]
 }
 
 run "ssh_rejects_public_cidr" {

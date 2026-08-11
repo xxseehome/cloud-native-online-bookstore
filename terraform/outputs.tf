@@ -19,7 +19,7 @@ output "ecs_instance_id" {
 }
 
 output "ecs_public_ip" {
-  description = "Public IP used to access the demonstration when ALB is disabled."
+  description = "Public IP used as the fallback entry point when no load balancer is enabled."
   value       = module.compute.public_ip
 }
 
@@ -41,4 +41,14 @@ output "alb_id" {
 output "alb_dns_name" {
   description = "ALB DNS name when enable_alb is true."
   value       = var.enable_alb ? module.alb[0].dns_name : null
+}
+
+output "slb_id" {
+  description = "SLB ID when enable_slb is true."
+  value       = var.enable_slb ? module.slb[0].id : null
+}
+
+output "slb_address" {
+  description = "Public SLB address when enable_slb is true."
+  value       = var.enable_slb ? module.slb[0].address : null
 }

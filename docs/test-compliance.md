@@ -17,7 +17,7 @@ demonstration. The source requirements are recorded in the supplied
 | Load balancing | Existing Hangzhou CLB trial provides stable HTTP entry and health check | `docs/architecture.md`, CLB listener evidence | Satisfied |
 | Node-level HA | Not implemented | One ECS/K3s server; three-server K3s HA would add capacity/cost | Explicit limitation |
 | Documentation and diagrams | Application, infrastructure, pipeline, failure-domain and load-balancer decision diagrams | `docs/architecture.md` | Satisfied |
-| Acceptance material | Redacted CI, Terraform, promotion, CLB, application and monitoring screenshots | `docs/evidence/` and `docs/acceptance-evidence.md` | Complete after final capture |
+| Acceptance material | Redacted CI, Terraform, promotion, CLB, application, resilience and monitoring screenshots | `docs/evidence/` and `docs/acceptance-evidence.md` | Satisfied |
 
 ## Out of scope
 

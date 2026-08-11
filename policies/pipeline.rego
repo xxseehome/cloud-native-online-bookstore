@@ -40,8 +40,21 @@ kubernetes_deploy_has_approval {
   has_need("deploy", "approval")
 }
 
+kubernetes_workflow_dispatch_inputs[inputs] {
+  inputs := input.on.workflow_dispatch.inputs
+}
+
+kubernetes_workflow_dispatch_inputs[inputs] {
+  inputs := input["on"].workflow_dispatch.inputs
+}
+
+kubernetes_workflow_dispatch_inputs[inputs] {
+  inputs := input[true].workflow_dispatch.inputs
+}
+
 kubernetes_deploy_requires_image_tag {
-  input.on.workflow_dispatch.inputs.image_tag.required == true
+  kubernetes_workflow_dispatch_inputs[inputs]
+  inputs.image_tag.required == true
 }
 
 resilience_has_staging_approval {
@@ -50,7 +63,8 @@ resilience_has_staging_approval {
 }
 
 resilience_requires_image_sha {
-  input.on.workflow_dispatch.inputs.expected_image_sha.required == true
+  kubernetes_workflow_dispatch_inputs[inputs]
+  inputs.expected_image_sha.required == true
 }
 
 deny[msg] {

@@ -138,7 +138,13 @@ variable "oss_bucket_name" {
 }
 
 variable "enable_alb" {
-  description = "Create/manage an ALB. False by default to prevent accidental paid resources before trial activation/import."
+  description = "Create/manage an ALB. False by default to prevent accidental paid resources before trial activation/import. Mutually exclusive with enable_slb."
+  type        = bool
+  default     = false
+}
+
+variable "enable_slb" {
+  description = "Create/manage the console-activated SLB trial. False by default; import the trial instance before enabling. Mutually exclusive with enable_alb."
   type        = bool
   default     = false
 }

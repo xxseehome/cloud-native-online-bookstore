@@ -11,7 +11,7 @@ cloud credentials and does not run `terraform apply` in pull requests.
 - one security group with restricted SSH and K3s API access;
 - one pay-as-you-go ECS instance bootstrapped as a single-node K3s cluster;
 - one private, encrypted, versioned OSS bucket;
-- an optional internet-facing ALB, disabled by default.
+- an optional internet-facing ALB or SLB, disabled by default.
 
 Five application environments are Kubernetes namespaces in this shared stack.
 They are not five copies of the Alibaba Cloud infrastructure.
@@ -22,6 +22,7 @@ They are not five copies of the Alibaba Cloud infrastructure.
 terraform/
 ├── modules/
 │   ├── alb/       # Optional ALB foundation
+│   ├── slb/       # Optional SLB trial integration
 │   ├── compute/   # ECS, SSH key and pinned K3s bootstrap
 │   ├── network/   # VPC, vSwitches and security rules
 │   └── storage/   # Private OSS bucket
@@ -31,13 +32,15 @@ terraform/
 
 ## Cost controls
 
-- `enable_alb` defaults to `false`.
+- `enable_alb` and `enable_slb` default to `false` and are mutually exclusive.
 - ECS uses `PostPaid`, `PayByTraffic`, a bounded egress rate and
   `StopCharging` when stopped.
 - SSH and the optional K3s API reject `0.0.0.0/0` for every allowed CIDR.
 - The K3s API has no public ingress by default; kubectl runs on the node.
 - ECS and OSS have `prevent_destroy` guards against accidental data loss.
 - ALB requires two availability zones and also has deletion protection.
+- SLB is enabled only after the console-created trial instance is imported; its
+  listener, server group and ECS backend are then managed by Terraform.
 - No NAT Gateway, RDS, ACK, SLS or paid KMS instance is created.
 - Pull-request CI runs only formatting, initialization, validation and mocked
   plans. It has no Alibaba Cloud credentials and cannot create resources.
@@ -84,10 +87,23 @@ identity, remote state, plan artifact, approval, and controlled apply workflow.
 The same guide contains the one-time, state-only adoption workflow required for
 the console-created free-trial VPC, vSwitch, security group, and ECS instance.
 
-## ALB trial import path
+## ALB/SLB trial import path
 
-The Alibaba Cloud ALB trial automatically creates an ALB and two EIPs, which
-means it cannot initially be created by this configuration. After the VPC and
+The Alibaba Cloud trial flow creates the load-balancer instance outside
+Terraform, which means the instance must be imported before a real apply.
+
+For the selected SLB trial, after the VPC and vSwitches exist:
+
+1. activate **负载均衡 SLB 免费体验** in Hangzhou;
+2. set `TF_ENABLE_SLB=true` and `TF_EXISTING_SLB_ID=<trial-slb-id>`;
+3. run **Terraform Adopt Existing Resources** and confirm the SLB ID;
+4. run a plan-only **Terraform Deploy**, then approve the apply.
+
+The apply creates the HTTP listener, health check, virtual server group and ECS
+backend attachment. The listener forwards port 80 to Traefik on the K3s node.
+
+For ALB, the trial automatically creates an ALB and two EIPs, which means it
+cannot initially be created by this configuration. After the VPC and
 vSwitches exist:
 
 1. activate the ALB trial against those vSwitches;

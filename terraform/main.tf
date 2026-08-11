@@ -12,6 +12,13 @@ check "alb_requires_two_zones" {
   }
 }
 
+check "only_one_public_load_balancer" {
+  assert {
+    condition     = !(var.enable_alb && var.enable_slb)
+    error_message = "enable_alb and enable_slb are mutually exclusive; select one public load balancer mode."
+  }
+}
+
 module "network" {
   source = "./modules/network"
 
@@ -21,7 +28,7 @@ module "network" {
   vswitch_cidrs         = var.vswitch_cidrs
   ssh_ingress_cidrs     = var.ssh_ingress_cidrs
   k3s_api_ingress_cidrs = var.k3s_api_ingress_cidrs
-  web_ingress_cidr      = var.enable_alb ? var.vpc_cidr : "0.0.0.0/0"
+  web_ingress_cidr      = var.enable_alb || var.enable_slb ? var.vpc_cidr : "0.0.0.0/0"
   tags                  = local.common_tags
 }
 
@@ -61,4 +68,14 @@ module "alb" {
     }
   ]
   tags = local.common_tags
+}
+
+module "slb" {
+  count  = var.enable_slb ? 1 : 0
+  source = "./modules/slb"
+
+  name_prefix     = local.name_prefix
+  vswitch_id      = module.network.vswitch_ids[0]
+  ecs_instance_id = module.compute.instance_id
+  tags            = local.common_tags
 }

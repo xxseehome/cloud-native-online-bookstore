@@ -9,7 +9,7 @@
 | Frontend image tag | `e58691acb4d4e37a8f957e3df5b71b4802eeba1a` |
 | Registry | Hangzhou ACR Personal (GHCR is the build/publish fallback) |
 | Cluster | One K3s node on Alibaba Cloud ECS, `cn-hangzhou` |
-| External entry point | ECS public IP + Traefik HTTP ingress; ALB/SLB disabled |
+| External entry point | SLB trial + Traefik HTTP ingress after adoption; ECS public IP remains the fallback |
 
 The deployment workflow rejects tags that are not full 40-character commit
 SHAs. Every row below therefore points to a promotion run using the exact same

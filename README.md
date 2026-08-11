@@ -13,6 +13,13 @@ would add load-balancer/EIP resources without providing node failover for the
 single ECS. See the complete
 [platform architecture](docs/architecture.md).
 
+### Live demonstration endpoint
+
+Use the existing CLB public address: **http://8.154.33.8/**.
+The direct ECS address `118.178.185.202` is not a supported application entry
+point and is intentionally not reachable by the security group. Verify the
+live service through the CLB with `/`, `/health`, and `/api/books`.
+
 ## Platform
 
 - Alibaba Cloud

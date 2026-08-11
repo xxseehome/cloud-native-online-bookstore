@@ -22,7 +22,7 @@ variable "environment" {
 }
 
 variable "availability_zones" {
-  description = "Availability zones for vSwitches. Provide at least two zones when enable_alb is true."
+  description = "Availability zones for vSwitches in the shared VPC."
   type        = list(string)
 }
 
@@ -137,14 +137,8 @@ variable "oss_bucket_name" {
   }
 }
 
-variable "enable_alb" {
-  description = "Create/manage an ALB. False by default to prevent accidental paid resources before trial activation/import. Mutually exclusive with enable_slb."
-  type        = bool
-  default     = false
-}
-
 variable "enable_slb" {
-  description = "Create/manage the console-activated SLB trial. False by default; import the trial instance before enabling. Mutually exclusive with enable_alb."
+  description = "Create/manage the console-activated CLB (SLB family) trial. False by default; import the trial instance before enabling."
   type        = bool
   default     = false
 }

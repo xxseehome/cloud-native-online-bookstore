@@ -15,11 +15,6 @@ run "cost_safe_defaults" {
   command = plan
 
   assert {
-    condition     = output.alb_id == null
-    error_message = "ALB must remain disabled by default to prevent an accidental paid resource."
-  }
-
-  assert {
     condition     = output.slb_id == null
     error_message = "SLB must remain disabled by default until the free-trial instance is explicitly adopted."
   }
@@ -33,29 +28,6 @@ run "cost_safe_defaults" {
     condition     = output.oss_bucket_name == "bookstore-foundation-test"
     error_message = "The storage module must preserve the requested globally unique bucket name."
   }
-}
-
-run "alb_rejects_one_zone" {
-  command = plan
-
-  variables {
-    enable_alb         = true
-    availability_zones = ["cn-hangzhou-h"]
-    vswitch_cidrs      = ["10.20.1.0/24"]
-  }
-
-  expect_failures = [check.alb_requires_two_zones]
-}
-
-run "load_balancers_are_mutually_exclusive" {
-  command = plan
-
-  variables {
-    enable_alb = true
-    enable_slb = true
-  }
-
-  expect_failures = [check.only_one_public_load_balancer]
 }
 
 run "ssh_rejects_public_cidr" {

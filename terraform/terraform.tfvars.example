@@ -26,6 +26,5 @@ ssh_public_key = "replace-with-public-key"
 # OSS bucket names are globally unique. Use the local-redundancy 20 GB free trial.
 oss_bucket_name = "bookstore-demo-REPLACE_WITH_UNIQUE_SUFFIX"
 
-# Keep both false until the corresponding trial resource is activated and imported.
-enable_alb = false
+# Keep the CLB trial disabled until the console-created instance is adopted.
 enable_slb = false

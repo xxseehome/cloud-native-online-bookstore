@@ -6,6 +6,13 @@ metadata:
     app.kubernetes.io/name: bookstore-frontend
 spec:
   replicas: 1
+  minReadySeconds: 5
+  progressDeadlineSeconds: 120
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: bookstore-frontend
@@ -14,6 +21,7 @@ spec:
       labels:
         app.kubernetes.io/name: bookstore-frontend
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
         - name: frontend
           image: crpi-guf725ppv0myjkdj-vpc.cn-hangzhou.personal.cr.aliyuncs.com/online-bookstore/bookstore-frontend:IMAGE_TAG
@@ -27,6 +35,12 @@ spec:
               port: http
             initialDelaySeconds: 3
             periodSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            failureThreshold: 30
+            periodSeconds: 2
           livenessProbe:
             httpGet:
               path: /healthz
@@ -47,6 +61,13 @@ spec:
                 - ALL
             readOnlyRootFilesystem: true
             runAsNonRoot: true
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - sleep 5
           volumeMounts:
             - name: nginx-cache
               mountPath: /var/cache/nginx

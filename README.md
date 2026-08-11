@@ -4,12 +4,13 @@ A cloud-native online bookstore platform built on Alibaba Cloud and Kubernetes.
 
 ## Architecture
 
-The demonstration uses the free-trial SLB as its preferred entry point after
-state adoption, with the ECS public IP retained as a cost-safe fallback. Both
-load-balancer modes are disabled by default until the selected trial resource is
-imported. Traffic then reaches Traefik Ingress, an Nginx frontend, and the
-FastAPI backend. Terraform also provisions a private, encrypted, versioned OSS
-bucket as the storage foundation. See the complete
+The demonstration uses the existing Hangzhou CLB (the basic SLB-family product)
+as its public HTTP entry point after state adoption. Traffic then reaches
+Traefik Ingress, an Nginx frontend, and the FastAPI backend. Terraform also
+provisions a private, encrypted, versioned OSS bucket as the storage
+foundation. ALB and NLB trials are intentionally not activated because they
+would add load-balancer/EIP resources without providing node failover for the
+single ECS. See the complete
 [platform architecture](docs/architecture.md).
 
 ## Platform
@@ -23,8 +24,8 @@ bucket as the storage foundation. See the complete
 
 ## Infrastructure as Code
 
-- Terraform modules for VPC, ECS/K3s, OSS, and optional ALB/SLB
-- Pull-request formatting, validation, and mocked infrastructure tests
+- Terraform modules for VPC, ECS/K3s, OSS, and the adopted CLB listener
+- Pull-request formatting, validation, security gates, and mocked infrastructure tests
 - Cost-safe defaults that do not apply cloud resources from CI
 
 See [Terraform Foundation](terraform/README.md) for the module layout, free-trial
@@ -36,6 +37,7 @@ constraints, and the staged deployment workflow.
 - Trunk-based development with short-lived feature branches
 - Immutable image promotion between environments
 - Terraform plan artifacts with protected-environment approval before apply
+- Manual staging workload resilience check with Pod deletion and continuous HTTP probes
 
 ## Container
 

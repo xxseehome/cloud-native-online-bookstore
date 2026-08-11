@@ -53,7 +53,7 @@ Create two RAM roles that trust this provider:
 
 - a plan role with read-only resource access plus the OSS permissions required
   to read state;
-- an apply role with only the VPC, ECS, OSS, ALB, RAM key-pair, and state access
+- an apply role with only the VPC, ECS, OSS, CLB, RAM key-pair, and state access
   required by this repository.
 
 Restrict the role trust conditions to these exact GitHub OIDC subjects:
@@ -108,9 +108,8 @@ In **Settings -> Secrets and variables -> Actions -> Variables**, add:
 | `TF_IMAGE_ID` | Exact Ubuntu image ID in the selected region |
 | `TF_INTERNET_MAX_BANDWIDTH_OUT` | `100` to preserve the trial instance configuration; traffic limits still apply |
 | `TF_OSS_BUCKET_NAME` | Globally unique application bucket name |
-| `TF_ENABLE_ALB` | `false` until the ALB trial/import is ready |
 | `TF_ENABLE_SLB` | `true` after the CLB (SLB) free-trial instance is imported |
-| `TF_EXISTING_SLB_ID` | Trial SLB ID from the Hangzhou console; required only when `TF_ENABLE_SLB=true` |
+| `TF_EXISTING_SLB_ID` | Existing Hangzhou CLB (SLB-family) ID; required only when `TF_ENABLE_SLB=true` |
 | `TF_EXISTING_VPC_ID` | `vpc-bp15izs541lrz2xnc2b7j` |
 | `TF_EXISTING_VSWITCH_ID` | `vsw-bp1d2g0o04pfsnxdp0y3a` |
 | `TF_EXISTING_SECURITY_GROUP_ID` | `sg-bp1e67jdt4t6c9y90298` |
@@ -133,7 +132,7 @@ the configuration in another account or region.
 ## 5. Adopt the console-created free-trial resources once
 
 The ECS free-trial flow created the VPC, vSwitch, security group, and instance
-before Terraform state existed. The SLB trial is also created in the console
+before Terraform state existed. The CLB trial is also created in the console
 before Terraform state exists. Do not run a normal apply until the existing
 resources are adopted.
 
@@ -187,7 +186,8 @@ created earlier in the same workflow run.
 - Remote state is private, encrypted, and versioned.
 - The OSS backend has no backend-level lock. Run Terraform only through these
   workflows. Production environments should add Tablestore locking.
-- ALB and SLB default to disabled in code. Enable only the selected trial
-  resource after it has been imported; never enable both flags.
+- Only the existing CLB (SLB family) trial is represented in code. ALB and NLB
+  trials are intentionally not activated because they would add resources and
+  do not provide failover for the single ECS node.
 - Resource adoption writes remote Terraform state but never changes Alibaba
   Cloud resources; the protected environment provides an explicit approval.

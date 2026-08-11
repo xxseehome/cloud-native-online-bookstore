@@ -2,12 +2,10 @@ from fastapi.testclient import TestClient
 
 from backend.main import app
 
-
 client = TestClient(app)
 
 
 def test_health():
-
     response = client.get("/health")
 
     assert response.status_code == 200
@@ -16,7 +14,6 @@ def test_health():
 
 
 def test_get_books():
-
     response = client.get("/api/books")
 
     assert response.status_code == 200
@@ -25,7 +22,6 @@ def test_get_books():
 
 
 def test_get_book():
-
     response = client.get("/api/books/1")
 
     assert response.status_code == 200

@@ -1,59 +1,72 @@
 # Acceptance Evidence
 
+This file is updated after the final `main` commit is promoted. Every
+deployment row must use the same full 40-character image SHA. Replace the
+`TBD` links only with the final run URLs; do not record credentials, tokens,
+private keys, account numbers or unredacted console data.
+
 ## Release identity
 
 | Item | Value |
 | --- | --- |
-| Main commit | [`e58691acb4d4e37a8f957e3df5b71b4802eeba1a`](https://github.com/xxseehome/cloud-native-online-bookstore/commit/e58691acb4d4e37a8f957e3df5b71b4802eeba1a) |
-| Backend image tag | `e58691acb4d4e37a8f957e3df5b71b4802eeba1a` |
-| Frontend image tag | `e58691acb4d4e37a8f957e3df5b71b4802eeba1a` |
-| Registry | Hangzhou ACR Personal (GHCR is the build/publish fallback) |
-| Cluster | One K3s node on Alibaba Cloud ECS, `cn-hangzhou` |
-| External entry point | CLB (SLB) trial public IP + Traefik HTTP ingress; production has an IP-only fallback route |
-
-The deployment workflow rejects tags that are not full 40-character commit
-SHAs. Every row below therefore points to a promotion run using the exact same
-release identity.
+| Main commit | `TBD after merge` |
+| Backend image tag | `TBD after final CI` |
+| Frontend image tag | `TBD after final CI` |
+| Registry | Hangzhou ACR Personal (GHCR publication fallback) |
+| Cluster | One K3s server on Alibaba Cloud ECS, `cn-hangzhou` |
+| External entry point | Existing CLB trial public IP + Traefik HTTP ingress |
 
 ## CI and security gates
 
-| Gate | Evidence |
+| Gate | Final evidence |
 | --- | --- |
-| Gitleaks | [Main CI run 31393791861](https://github.com/xxseehome/cloud-native-online-bookstore/actions/runs/31393791861) — passed |
-| Trivy image/config scan | [Main CI run 31393791861](https://github.com/xxseehome/cloud-native-online-bookstore/actions/runs/31393791861) — passed |
-| OPA/Conftest | [Main CI run 31393791861](https://github.com/xxseehome/cloud-native-online-bookstore/actions/runs/31393791861) — passed |
-| Unit tests, manifest and Terraform validation | [Main CI run 31393791861](https://github.com/xxseehome/cloud-native-online-bookstore/actions/runs/31393791861) — passed |
-| Image publication | [Main CI run 31393791861](https://github.com/xxseehome/cloud-native-online-bookstore/actions/runs/31393791861) — GHCR and Hangzhou ACR publication passed |
+| Ruff lint and format | `TBD` |
+| Gitleaks | `TBD` |
+| Trivy filesystem and images | `TBD` |
+| OPA/Conftest Kubernetes and workflow policy | `TBD` |
+| Unit tests and manifest render | `TBD` |
+| Image publication | `TBD` |
+| Terraform plan | `TBD` — must show `0 add / 0 change / 0 destroy` |
 
 ## Five-environment promotion
 
-| Environment | Namespace | Workflow run | Result |
-| --- | --- | --- | --- |
-| Development | `bookstore-dev` | [31395778130](https://github.com/xxseehome/cloud-native-online-bookstore/actions/runs/31395778130) | Passed |
-| Test | `bookstore-test` | [31396564930](https://github.com/xxseehome/cloud-native-online-bookstore/actions/runs/31396564930) | Passed |
-| Performance | `bookstore-perf` | [31397092693](https://github.com/xxseehome/cloud-native-online-bookstore/actions/runs/31397092693) | Passed |
-| Staging | `bookstore-staging` | [31441986475](https://github.com/xxseehome/cloud-native-online-bookstore/actions/runs/31441986475) | Passed after idempotent K3s API retry |
-| Production | `bookstore-production` | [31442639321](https://github.com/xxseehome/cloud-native-online-bookstore/actions/runs/31442639321) | Passed |
+| Order | Environment | Namespace | Final workflow run | Result |
+| ---: | --- | --- | --- | --- |
+| 1 | Development | `bookstore-dev` | `TBD` | Pending final SHA |
+| 2 | Test | `bookstore-test` | `TBD` | Pending final SHA |
+| 3 | Performance | `bookstore-perf` | `TBD` | Pending final SHA |
+| 4 | Staging | `bookstore-staging` | `TBD` | Pending final SHA |
+| 5 | Production | `bookstore-production` | `TBD` | Pending final SHA |
 
-Each successful deployment records the HTTP smoke-test and monitoring smoke-test
-messages in the `Deploy through ECS Cloud Assistant` step. Staging and
-production also show the `terraform-apply` approval event in the run page.
-Earlier transient retry failures are intentionally not listed as promotion
-evidence; the table links only to the successful run for each namespace.
+## Resilience and runtime evidence
 
-## Screenshot capture checklist
+| Check | Final evidence |
+| --- | --- |
+| Staging approval and resilience workflow | `TBD` |
+| Two Ready backend/frontend replicas after one-Pod deletions | `TBD` |
+| Zero HTTP probe failures during the exercise | `TBD` |
+| K3s systemd service enabled and active | `TBD` |
+| CLB listener and backend health | `TBD` |
+| Homepage, `/health`, and `/api/books` return HTTP 200 | `TBD` |
+| Prometheus/Grafana rollout and health | `TBD` |
 
-The linked run pages are the canonical, reproducible evidence. For a review
-package, capture the following visible pages and store them with the release
-notes (do not put credentials or tokens in screenshots):
+## Screenshot inventory
 
-1. Main CI summary showing Gitleaks, Trivy, OPA, tests, and image publication.
-2. Development/Test/Performance run summaries showing green jobs and the full
-   SHA link.
-3. Staging and Production run summaries showing the approval event and green
-   `Deploy through ECS Cloud Assistant` job.
-4. The application page at `http://<CLB-public-IP>/` and the `/health` response.
-5. Grafana/monitoring rollout and smoke-test output from the same deployment.
+Final redacted screenshots are stored under `docs/evidence/` and linked here:
 
-These screenshots complement, rather than replace, the immutable GitHub
-Actions links above.
+1. `TBD` — final CI with Ruff, Gitleaks, Trivy, OPA and publication.
+2. `TBD` — Terraform plan/apply summary and zero-change plan.
+3. `TBD` — five promotion runs and the common image SHA.
+4. `TBD` — staging Pod resilience output and approval.
+5. `TBD` — CLB listener health and public homepage/health response.
+6. `TBD` — Prometheus/Grafana runtime status.
+
+Screenshots complement the immutable GitHub Actions links; they are not a
+substitute for the run summaries or the final repository state.
+
+## Accepted limitation
+
+This is workload self-healing on one ECS/K3s node. ECS, system-disk, K3s
+server, and availability-zone failure can still interrupt service. K3s
+node-level HA is intentionally not claimed because it requires at least three
+server nodes and would violate the no-new-paid-resources constraint.

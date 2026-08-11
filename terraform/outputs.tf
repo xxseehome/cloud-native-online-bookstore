@@ -33,16 +33,6 @@ output "oss_intranet_endpoint" {
   value       = module.storage.intranet_endpoint
 }
 
-output "alb_id" {
-  description = "ALB ID when enable_alb is true."
-  value       = var.enable_alb ? module.alb[0].id : null
-}
-
-output "alb_dns_name" {
-  description = "ALB DNS name when enable_alb is true."
-  value       = var.enable_alb ? module.alb[0].dns_name : null
-}
-
 output "slb_id" {
   description = "SLB ID when enable_slb is true."
   value       = var.enable_slb ? module.slb[0].id : null

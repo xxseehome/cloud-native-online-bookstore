@@ -1,118 +1,78 @@
 # Alibaba Cloud Terraform Foundation
 
 This directory defines the cost-conscious Alibaba Cloud foundation for the
-Online Book Store demonstration. It is intentionally safe to validate without
-cloud credentials and does not run `terraform apply` in pull requests.
+Online Book Store demonstration. Pull requests validate the configuration but
+never receive cloud credentials or run `terraform apply`.
 
 ## Managed resources
 
-- one VPC;
-- one vSwitch per supplied availability zone;
-- one security group with restricted SSH and K3s API access;
+- one VPC and one vSwitch per supplied availability zone;
+- one security group with restricted SSH and optional K3s API access;
 - one pay-as-you-go ECS instance bootstrapped as a single-node K3s cluster;
 - one private, encrypted, versioned OSS bucket;
-- an optional internet-facing ALB or SLB, disabled by default.
+- the existing Hangzhou CLB (SLB family) trial, only after it is adopted.
 
-Five application environments are Kubernetes namespaces in this shared stack.
-They are not five copies of the Alibaba Cloud infrastructure.
+Five application environments are Kubernetes namespaces in this shared stack;
+they are not five copies of Alibaba Cloud infrastructure.
 
 ## Module layout
 
 ```text
 terraform/
 ├── modules/
-│   ├── alb/       # Optional ALB foundation
-│   ├── slb/       # Optional SLB trial integration
-│   ├── compute/   # ECS, SSH key and pinned K3s bootstrap
+│   ├── slb/       # Existing CLB listener and ECS backend integration
+│   ├── compute/   # ECS and pinned K3s bootstrap
 │   ├── network/   # VPC, vSwitches and security rules
 │   └── storage/   # Private OSS bucket
 ├── tests/         # Mock-provider safety tests
 └── *.tf           # Shared demonstration stack
 ```
 
+ALB and NLB modules are intentionally not present. They are documented as
+future options only; no new load-balancer or EIP resource is created by this
+plan.
+
 ## Cost controls
 
-- `enable_alb` and `enable_slb` default to `false` and are mutually exclusive.
+- `enable_slb` defaults to `false`; the existing CLB trial is enabled only
+  after its console-created instance is imported.
 - ECS uses `PostPaid`, `PayByTraffic`, a bounded egress rate and
   `StopCharging` when stopped.
 - SSH and the optional K3s API reject `0.0.0.0/0` for every allowed CIDR.
-- The K3s API has no public ingress by default; kubectl runs on the node.
 - ECS and OSS have `prevent_destroy` guards against accidental data loss.
-- ALB requires two availability zones and also has deletion protection.
-- SLB is enabled only after the console-created trial instance is imported; its
-  listener, server group and ECS backend are then managed by Terraform.
 - No NAT Gateway, RDS, ACK, SLS or paid KMS instance is created.
-- Pull-request CI runs only formatting, initialization, validation and mocked
-  plans. It has no Alibaba Cloud credentials and cannot create resources.
+- The final reviewed Terraform plan must be exactly `0 add / 0 change / 0
+  destroy`; stop before apply if it is not.
 
 Free-trial limits are account entitlements, not Terraform guarantees. Confirm
-the ECS, OSS, ALB, EIP and traffic line items in the Alibaba Cloud console before
-every real apply.
-
-## Prepare values in the browser
-
-1. Use Alibaba Cloud Cloud Shell to generate an SSH key if required:
-
-   ```shell
-   ssh-keygen -t ed25519 -C bookstore-admin
-   ```
-
-2. Copy only the `.pub` value. Keep the private key out of GitHub and Terraform
-   state.
-3. The adopted free-trial instance uses `ecs.e-c1m2.large` in
-   `cn-hangzhou-i` with image
-   `ubuntu_22_04_x64_20G_alibase_20260723.vhd`.
-4. Choose a globally unique OSS bucket name for the 20-GB local-redundancy
-   trial.
-5. Copy the example locally and replace every placeholder:
-
-   ```shell
-   cp terraform.tfvars.example terraform.tfvars
-   ```
-
-`terraform.tfvars` is ignored by Git and must never be committed.
+the ECS, OSS, CLB and traffic line items in the Alibaba Cloud console before a
+real plan/apply and release trial resources before their expiry dates.
 
 ## Validate without creating resources
 
 ```shell
-terraform fmt -recursive
+terraform fmt -check -recursive
 terraform init -backend=false
 terraform validate
 terraform test
 ```
 
-Cloud deployment is intentionally separate from pull-request validation. See
-[Terraform Deployment from GitHub](../docs/terraform-deployment.md) for the OIDC
-identity, remote state, plan artifact, approval, and controlled apply workflow.
-The same guide contains the one-time, state-only adoption workflow required for
-the console-created free-trial VPC, vSwitch, security group, and ECS instance.
+The provider lock file is committed so CI resolves the same provider version on
+every runner. The GitHub deployment guide covers OIDC, encrypted OSS state,
+plan artifacts, protected approval and the one-time state-only adoption flow.
 
-## ALB/SLB trial import path
+## CLB trial adoption
 
-The Alibaba Cloud trial flow creates the load-balancer instance outside
-Terraform, which means the instance must be imported before a real apply.
+The Alibaba Cloud console creates the CLB trial before Terraform can manage it.
+After the VPC, vSwitch and ECS foundation exist:
 
-For the selected SLB trial, after the VPC and vSwitches exist:
+1. activate the existing Hangzhou CLB trial;
+2. set `TF_ENABLE_SLB=true` and `TF_EXISTING_SLB_ID=<trial-clb-id>` in GitHub
+   repository variables;
+3. run **Terraform Adopt Existing Resources** and confirm the ECS instance;
+4. run a plan-only **Terraform Deploy** and require `0 add / 0 change / 0
+   destroy` before any apply.
 
-1. activate **负载均衡 SLB 免费体验** in Hangzhou;
-2. set `TF_ENABLE_SLB=true` and `TF_EXISTING_SLB_ID=<trial-slb-id>`;
-3. run **Terraform Adopt Existing Resources** and confirm the SLB ID;
-4. run a plan-only **Terraform Deploy**, then approve the apply.
-
-The apply creates the HTTP listener, health check, virtual server group and ECS
-backend attachment. The listener forwards port 80 to Traefik on the K3s node.
-
-For ALB, the trial automatically creates an ALB and two EIPs, which means it
-cannot initially be created by this configuration. After the VPC and
-vSwitches exist:
-
-1. activate the ALB trial against those vSwitches;
-2. set `enable_alb = true`;
-3. import the trial ALB before any apply:
-
-   ```shell
-   terraform import 'module.alb[0].alicloud_alb_load_balancer.this' <alb-id>
-   ```
-
-The two EIPs and listener/backend resources will be modeled in the networking
-integration phase after the trial-generated resource IDs are known.
+The managed CLB module then owns the HTTP listener, `/health` health check,
+virtual server group and ECS backend attachment. ALB/NLB trials must remain
+unactivated under the no-new-resource constraint.

@@ -25,6 +25,10 @@ resource "alicloud_instance" "k3s" {
 
   lifecycle {
     prevent_destroy = true
+
+    # The free-trial ECS instance reports this field as Not-applicable and
+    # cannot accept the commercial StopCharging setting.
+    ignore_changes = [stopped_mode]
   }
 }
 
